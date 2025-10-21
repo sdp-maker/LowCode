@@ -1,0 +1,283 @@
+/* CSS变量定义 */
+
+/* Glide 风格的颜色系统 */
+:root {
+  /* 主色调 - Glide 蓝色系 */
+  --color-primary: #4f46e5;
+  --color-primary-light: #6366f1;
+  --color-primary-dark: #3730a3;
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  
+  /* 次要色调 - 现代灰色系 */
+  --color-secondary: #64748b;
+  --color-secondary-light: #94a3b8;
+  --color-secondary-dark: #475569;
+  --color-secondary-50: #f8fafc;
+  --color-secondary-100: #f1f5f9;
+  --color-secondary-200: #e2e8f0;
+  --color-secondary-300: #cbd5e1;
+  --color-secondary-400: #94a3b8;
+  --color-secondary-500: #64748b;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1e293b;
+  --color-secondary-900: #0f172a;
+  
+  /* 成功色 - 现代绿色系 */
+  --color-success: #059669;
+  --color-success-light: #10b981;
+  --color-success-dark: #047857;
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  
+  /* 警告色 - 现代橙色系 */
+  --color-warning: #d97706;
+  --color-warning-light: #f59e0b;
+  --color-warning-dark: #b45309;
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  
+  /* 危险色 - 现代红色系 */
+  --color-danger: #dc2626;
+  --color-danger-light: #ef4444;
+  --color-danger-dark: #b91c1c;
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  
+  /* 信息色 - 现代青色系 */
+  --color-info: #0891b2;
+  --color-info-light: #06b6d4;
+  --color-info-dark: #0e7490;
+  --color-info-50: #ecfeff;
+  --color-info-100: #cffafe;
+  --color-info-500: #06b6d4;
+  --color-info-600: #0891b2;
+  
+  /* 中性色 - Glide 风格 */
+  --color-white: #ffffff;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  --color-black: #000000;
+  
+  /* 背景色 - Glide 风格 */
+  --color-background: #f8fafc;
+  --color-background-light: #ffffff;
+  --color-background-dark: #f1f5f9;
+  --color-background-subtle: #f8fafc;
+  
+  /* 文字颜色 - Glide 风格 */
+  --color-text: #334155;
+  --color-text-light: #64748b;
+  --color-text-lighter: #94a3b8;
+  --color-text-dark: #1e293b;
+  --color-text-inverse: #ffffff;
+  --color-text-muted: #64748b;
+  
+  /* 边框颜色 - Glide 风格 */
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  --color-border-dark: #cbd5e1;
+  --color-border-subtle: #f1f5f9;
+  
+  /* 阴影颜色 - Glide 风格 */
+  --color-shadow: rgba(15, 23, 42, 0.08);
+  --color-shadow-dark: rgba(15, 23, 42, 0.12);
+  --color-shadow-subtle: rgba(15, 23, 42, 0.04);
+}
+
+/* 字体系统 - Glide 风格 */
+:root {
+  /* 字体族 - 现代无衬线字体 */
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-family-serif: 'Georgia', 'Times New Roman', serif;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+  
+  /* 字体大小 */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+  
+  /* 字体粗细 */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* 行高 */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+}
+
+/* 间距系统 */
+:root {
+  /* 间距 */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.25rem;   /* 20px */
+  --spacing-6: 1.5rem;    /* 24px */
+  --spacing-8: 2rem;      /* 32px */
+  --spacing-10: 2.5rem;   /* 40px */
+  --spacing-12: 3rem;     /* 48px */
+  --spacing-16: 4rem;     /* 64px */
+  --spacing-20: 5rem;     /* 80px */
+  --spacing-24: 6rem;     /* 96px */
+  --spacing-32: 8rem;     /* 128px */
+}
+
+/* 圆角系统 */
+:root {
+  --border-radius-none: 0;
+  --border-radius-sm: 0.125rem;   /* 2px */
+  --border-radius: 0.25rem;       /* 4px */
+  --border-radius-md: 0.375rem;   /* 6px */
+  --border-radius-lg: 0.5rem;     /* 8px */
+  --border-radius-xl: 0.75rem;    /* 12px */
+  --border-radius-2xl: 1rem;      /* 16px */
+  --border-radius-full: 9999px;
+}
+
+/* 阴影系统 - Glide 风格 */
+:root {
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.1), 0 1px 2px 0 rgba(15, 23, 42, 0.06);
+  --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -1px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  --shadow-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(15, 23, 42, 0.06);
+  --shadow-none: 0 0 #0000;
+}
+
+/* 过渡动画 */
+:root {
+  --transition-duration-fast: 150ms;
+  --transition-duration-normal: 300ms;
+  --transition-duration-slow: 500ms;
+  
+  --transition-timing-ease: ease;
+  --transition-timing-ease-in: ease-in;
+  --transition-timing-ease-out: ease-out;
+  --transition-timing-ease-in-out: ease-in-out;
+  
+  --transition-all: all var(--transition-duration-normal) var(--transition-timing-ease);
+  --transition-colors: color var(--transition-duration-normal) var(--transition-timing-ease), 
+                       background-color var(--transition-duration-normal) var(--transition-timing-ease), 
+                       border-color var(--transition-duration-normal) var(--transition-timing-ease);
+  --transition-opacity: opacity var(--transition-duration-normal) var(--transition-timing-ease);
+  --transition-shadow: box-shadow var(--transition-duration-normal) var(--transition-timing-ease);
+  --transition-transform: transform var(--transition-duration-normal) var(--transition-timing-ease);
+}
+
+/* 断点系统 */
+:root {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* Z-index 层级 */
+:root {
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --z-index-toast: 1080;
+}
+
+/* 主题变量 - 可用于深色模式等主题切换 */
+:root {
+  /* 主题切换时的过渡效果 */
+  --theme-transition: color var(--transition-duration-normal) var(--transition-timing-ease), 
+                     background-color var(--transition-duration-normal) var(--transition-timing-ease), 
+                     border-color var(--transition-duration-normal) var(--transition-timing-ease);
+}
+
+/* 深色主题变量 - Glide 风格 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0f172a;
+    --color-background-light: #1e293b;
+    --color-background-dark: #0f172a;
+    --color-background-subtle: #1e293b;
+    
+    --color-text: #f1f5f9;
+    --color-text-light: #cbd5e1;
+    --color-text-lighter: #94a3b8;
+    --color-text-dark: #f8fafc;
+    --color-text-muted: #94a3b8;
+    
+    --color-border: #334155;
+    --color-border-light: #475569;
+    --color-border-dark: #1e293b;
+    --color-border-subtle: #334155;
+    
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-shadow-dark: rgba(0, 0, 0, 0.5);
+    --color-shadow-subtle: rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* 组件特定变量 */
+:root {
+  /* 按钮 */
+  --button-height-sm: 2rem;
+  --button-height: 2.5rem;
+  --button-height-lg: 3rem;
+  
+  /* 输入框 */
+  --input-height-sm: 2rem;
+  --input-height: 2.5rem;
+  --input-height-lg: 3rem;
+  
+  /* 卡片 */
+  --card-padding: var(--spacing-6);
+  --card-border-radius: var(--border-radius-lg);
+  --card-shadow: var(--shadow-md);
+  
+  /* 导航 */
+  --nav-height: 4rem;
+  --nav-padding-x: var(--spacing-6);
+  
+  /* 侧边栏 */
+  --sidebar-width: 16rem;
+  --sidebar-width-collapsed: 4rem;
+}
