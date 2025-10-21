@@ -11,7 +11,9 @@
     "lint:style": "stylelint --fix apps/builder/src/**/*.{css,scss}",
     "spell": "npx cspell \"apps/builder/src/**/*.{js,jsx,ts,tsx,vue,css,scss,md}\"",
     "spell:check": "npx cspell \"apps/builder/src/**/*.{js,jsx,ts,tsx,vue,css,scss,md}\" --no-must-find-files",
-    "commit": "cz-git"
+    "commit": "cz-git",
+    "commitlint": "npx commitlint --edit",
+    "prepare": "husky"
   },
   "config": {
     "commitizen": {
@@ -25,22 +27,22 @@
     "npm": "^11.6.2"
   },
   "devDependencies": {
-    "eslint": "9.7.0",
-    "@eslint/js": "^9.7.0",
-    "eslint-plugin-vue": "^9.27.0",
-    "globals": "^15.8.0",
-    "@typescript-eslint/parser": "^7.16.1",
-    "vue-eslint-parser": "^9.4.2",
-    "eslint-plugin-simple-import-sort": "^9.0.0",
-    "stylelint": "^16.6.1",
-    "stylelint-config-standard": "^36.0.0",
-    "stylelint-config-standard-vue": "^1.0.0",
-    "stylelint-config-standard-scss": "^13.1.0",
-    "cspell":"9.2.1",
-    "cz-git": "^1.10.1",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
-    "commitizen": "^4.3.0"
-
+    "@eslint/js": "^9.7.0",
+    "@typescript-eslint/parser": "^7.16.1",
+    "commitizen": "^4.3.0",
+    "cspell": "9.2.1",
+    "cz-git": "^1.10.1",
+    "eslint": "9.7.0",
+    "eslint-plugin-simple-import-sort": "^9.0.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "globals": "^15.8.0",
+    "husky": "^9.1.7",
+    "stylelint": "^16.6.1",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "vue-eslint-parser": "^9.4.2"
   }
 }
