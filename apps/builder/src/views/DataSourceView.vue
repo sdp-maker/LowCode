@@ -1,8 +1,19 @@
-/*
+<!--
  * @Author: sdp-maker 19179977082@163.com
- * @Date: 2025-10-21 17:20:14
+ * @Date: 2025-10-21 20:30:56
  * @LastEditors: sdp-maker 19179977082@163.com
- * @LastEditTime: 2025-10-21 19:44:06
- * @FilePath: \LowCode\apps\builder\src\components\__tests__\HelloWorld.spec.ts
+ * @LastEditTime: 2025-10-21 20:43:45
+ * @FilePath: \LowCode\apps\builder\src\views\AppView.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
+-->
+<script setup lang="ts">
+
+</script>
+
+<template>
+  <div>
+    <h1>DataSource</h1>
+  </div>
+</template>
+
+<style scoped></style>
