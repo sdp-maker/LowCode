@@ -2,7 +2,7 @@
  * @Author: sdp-maker 19179977082@163.com
  * @Date: 2025-10-21 20:30:56
  * @LastEditors: sdp-maker 19179977082@163.com
- * @LastEditTime: 2025-01-27 10:30:00
+ * @LastEditTime: 2025-10-22 13:23:49
  * @FilePath: \LowCode\apps\builder\src\components\AppNavigator.vue
  * @Description: Glide 风格的现代化导航组件
 -->
@@ -18,14 +18,45 @@ import IconSettings from './icons/IconSettings.vue';
   <div class="min-h-screen bg-gray-50">
     <!-- 顶部导航栏 -->
     <header class="bg-white border-b border-gray-200 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="px-8">
         <div class="flex justify-between items-center h-16">
+          <!-- 左侧：Logo -->
           <div class="flex items-center">
             <div class="flex-shrink-0">
               <h1 class="text-xl font-semibold text-gray-900">低代码平台</h1>
             </div>
           </div>
-          <div class="flex items-center space-x-4">
+          
+          <!-- 中间：导航菜单 -->
+          <nav class="flex items-center space-x-1">
+            <RouterLink 
+              to="/app/dataSource" 
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
+              active-class="bg-indigo-50 text-indigo-600 shadow-sm"
+            >
+              <IconDatabase :size="16" class="flex-shrink-0" />
+              <span>数据源</span>
+            </RouterLink>
+            <RouterLink 
+              to="/app/layout" 
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
+              active-class="bg-indigo-50 text-indigo-600 shadow-sm"
+            >
+              <IconLayout :size="16" class="flex-shrink-0" />
+              <span>布局</span>
+            </RouterLink>
+            <RouterLink 
+              to="/app/actions" 
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
+              active-class="bg-indigo-50 text-indigo-600 shadow-sm"
+            >
+              <IconAction :size="16" class="flex-shrink-0" />
+              <span>动作</span>
+            </RouterLink>
+          </nav>
+          
+          <!-- 右侧：设置按钮 -->
+          <div class="flex items-center">
             <button class="p-2 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors">
               <IconSettings :size="20" />
             </button>
@@ -34,39 +65,9 @@ import IconSettings from './icons/IconSettings.vue';
       </div>
     </header>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <!-- 标签页导航 -->
-      <div class="mb-8">
-        <nav class="flex space-x-1 bg-white rounded-xl p-1 shadow-sm border border-gray-200">
-          <RouterLink 
-            to="/app/dataSource" 
-            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
-            active-class="bg-indigo-50 text-indigo-600 shadow-sm"
-          >
-            <IconDatabase :size="18" class="flex-shrink-0" />
-            <span>数据源</span>
-          </RouterLink>
-          <RouterLink 
-            to="/app/layout" 
-            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
-            active-class="bg-indigo-50 text-indigo-600 shadow-sm"
-          >
-            <IconLayout :size="18" class="flex-shrink-0" />
-            <span>布局</span>
-          </RouterLink>
-          <RouterLink 
-            to="/app/actions" 
-            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
-            active-class="bg-indigo-50 text-indigo-600 shadow-sm"
-          >
-            <IconAction :size="18" class="flex-shrink-0" />
-            <span>动作</span>
-          </RouterLink>
-        </nav>
-      </div>
-      
-      <!-- 主内容区域 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <!-- 主内容区域 -->
+    <div class=" pb-6">
+      <div class="bg-white  shadow-sm  h-full overflow-hidden">
         <RouterView />
       </div>
     </div>

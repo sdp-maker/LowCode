@@ -1,0 +1,62 @@
+<!--
+ * @Author: sdp-maker 19179977082@163.com
+ * @Date: 2025-10-21 17:20:14
+ * @LastEditors: sdp-maker 19179977082@163.com
+ * @LastEditTime: 2025-10-22 13:42:22
+ * @FilePath: \LowCode\apps\builder\src\App.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<script setup lang="ts">
+
+</script>
+
+<template>
+ <div class="components-drawer h-full flex flex-col">
+   <div class="drawer-header">
+     <h3 class="header-title">组件库</h3>
+   </div>
+  
+ </div>
+</template>
+
+<style scoped>
+.components-drawer {
+  @apply bg-white;
+}
+
+.drawer-header {
+  @apply px-4 py-3 border-b border-gray-100;
+}
+
+.header-title {
+  @apply text-sm font-semibold text-gray-800 m-0;
+}
+
+.drawer-content {
+  @apply flex-1 overflow-auto p-2;
+}
+
+.component-category {
+  @apply mb-4;
+}
+
+.category-title {
+  @apply text-xs font-medium text-gray-500 uppercase tracking-wider px-3 py-2;
+}
+
+.component-list {
+  @apply grid grid-cols-2 gap-2;
+}
+
+.component-item {
+  @apply flex flex-col items-center justify-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-move transition-colors;
+}
+
+.component-icon {
+  @apply mb-2 text-gray-600;
+}
+
+.component-name {
+  @apply text-xs text-gray-700;
+}
+</style>
