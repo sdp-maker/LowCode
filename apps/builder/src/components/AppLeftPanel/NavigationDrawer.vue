@@ -32,5 +32,42 @@
   @apply text-sm font-semibold text-gray-800 m-0;
 }
 
+.drawer-content {
+  @apply flex-1 p-2;
+  /* 美化滚动条 */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
 
+/* Webkit 滚动条样式 */
+.drawer-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drawer-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.drawer-content::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.drawer-content::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+.nav-item {
+  @apply flex items-center px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors;
+}
+
+.nav-item.active {
+  @apply bg-blue-50 text-blue-700;
+}
+
+.nav-icon {
+  @apply w-5 h-5 mr-3;
+}
 </style>
