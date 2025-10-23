@@ -21,10 +21,18 @@ const [isOpen, { toggle }] = useDisclosure(false)
     </div>
     <div class="panel-section">
       <ComponentsDrawer />
-      <button class="add-button" @click="toggle">+</button>
+      <div class="button-container">
+        <button class="add-button" @click="toggle">+</button>
+      </div>
     </div>
     <div class="app-left-sub-panel" v-if="isOpen">
-     <BlocksDrawer />
+      <div class="sub-panel-header">
+        <h3>组件库</h3>
+        <button class="close-button" @click="toggle">×</button>
+      </div>
+      <div class="sub-panel-content">
+        <BlocksDrawer />
+      </div>
     </div>
   </div>
 </template>
@@ -44,10 +52,29 @@ const [isOpen, { toggle }] = useDisclosure(false)
 .panel-section {
   @apply flex-1 h-1/2 relative;
   transition: flex 0.3s ease-in-out;
+  overflow: hidden; /* 确保内容不会溢出 */
 }
 
 .app-left-panel.expanded .panel-section {
   flex: 0 0 50%;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 5; /* 确保在组件库区域内，但低于弹出面板 */
+}
+
+.add-button {
+  @apply bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
 }
 
 .app-left-sub-panel {
@@ -64,6 +91,7 @@ const [isOpen, { toggle }] = useDisclosure(false)
 
 .sub-panel-header {
   @apply bg-gray-100 border-b border-gray-200 px-4 py-3 flex justify-between items-center;
+  flex-shrink: 0; /* 确保头部不会缩小 */
 }
 
 .sub-panel-header h3 {
@@ -77,24 +105,16 @@ const [isOpen, { toggle }] = useDisclosure(false)
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .sub-panel-content {
   @apply p-4 flex-1;
-}
-
-.add-button {
-  @apply bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-colors duration-200;
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  line-height: 1;
-  z-index: 20;
+  overflow-y: auto; /* 允许内容区域滚动 */
 }
 </style>

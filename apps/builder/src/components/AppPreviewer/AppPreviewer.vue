@@ -7,12 +7,13 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 import { SmoothDndContainer } from "@/components/SmoothDnd/SmoothDndContainer"
 import { SmoothDndDraggable } from "@/components/SmoothDnd/SmoothDndDraggable"
 import { createBlock } from "@/blocks"
 import type { Block } from "@/types/block"
-
+import { defineAsyncComponent } from 'vue'
+import BlockRenderer from '@/blocks/BlockRenderer.vue'
 // 预览区域的组件列表
 const previewBlocks = ref<Block[]>([])
 
@@ -31,6 +32,30 @@ const handleDrop = (result: any) => {
 const getChildPayload = (index: number) => {
   return previewBlocks.value[index]
 }
+//远程物料
+// const loadComponent = async () => {
+//   const res = await fetch('https://cnodejs.org/api/v1/topics')
+//   const data = await res.json()
+//   return data.data.map(item => h('div', {}, item.title))
+// }
+// const txt = defineAsyncComponent(() => loadComponent())
+
+const blocks = ref([
+  {
+    type: 'chart',
+    id: '0'
+  },
+  
+{
+  type: 'button',
+  id: '1'
+}, {
+  type: 'text',
+  id: '2'
+}, {
+  type: 'image',
+  id: '3'
+}])
 </script>
 
 <template>
@@ -42,12 +67,12 @@ const getChildPayload = (index: number) => {
     :get-child-payload="getChildPayload"
     :drop-placeholder="{ className: 'drop-placeholder', animationDuration: '150ms', showOnTop: true }"
   >
-    <SmoothDndDraggable v-for="block in previewBlocks" :key="block.id">
-      <div class="preview-block">
-        {{ block.label }}
-      </div>
+    <SmoothDndDraggable v-for="block in blocks" :key="block.id">
+      
+        <BlockRenderer :block="block" />
     </SmoothDndDraggable>
   </SmoothDndContainer>
+  <!-- <component :is="txt" /> -->
  </div>
 </template>
 
