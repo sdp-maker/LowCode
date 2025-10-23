@@ -7,23 +7,31 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup lang="ts">
+import { getBlocks } from "@/blocks"
+import { SmoothDndContainer } from "@/components/SmoothDnd/SmoothDndContainer"
+import { SmoothDndDraggable } from "@/components/SmoothDnd/SmoothDndDraggable"
 
+// 获取所有块定义
+const blocks = getBlocks()
+
+// 提供拖拽载荷，跨容器时作为 payload 传递
+const getChildPayload = (index: number) => blocks[index]
 </script>
 
 <template>
- <div class="components-drawer h-full flex flex-col">
-   <div class="drawer-header">
-     <h3 class="header-title">组件库</h3>
-   </div>
-   <div class="drawer-content"  >
-     <ul >
-<li v-for="i in [1,2,3,4,5,6,7,8,9]" :key="i">
-  blockDrawerItem
-</li>
-     </ul>
-   </div>
- 
- </div>
+  <div class="components-drawer h-full flex flex-col">
+    <div class="drawer-header">
+      <h3 class="header-title">组件库</h3>
+    </div>
+    <div class="drawer-content">
+      <SmoothDndContainer behaviour="copy" group-name="blocks" orientation="vertical" :get-child-payload="getChildPayload">
+        <SmoothDndDraggable v-for="block in blocks" :key="block.type" class="component-item">
+          <div class="component-icon">{{ block.icon }}</div>
+          <div class="component-name">{{ block.name }}</div>
+        </SmoothDndDraggable>
+      </SmoothDndContainer>
+    </div>  
+  </div>
 </template>
 
 <style scoped>

@@ -2,16 +2,20 @@
  * @Author: sdp-maker 19179977082@163.com
  * @Date: 2025-10-22 15:19:24
  * @LastEditors: sdp-maker 19179977082@163.com
- * @LastEditTime: 2025-10-22 15:56:26
+ * @LastEditTime: 2025-10-23 15:00:48
  * @FilePath: \LowCode\apps\builder\src\components\SmoothDnd\SmoothDndContainer.ts
  * @Description: SmoothDnD 容器组件，用于包装可拖拽元素
  */
 import { defineComponent, h } from 'vue'
 import type { PropType } from 'vue'
 import { Container } from 'vue3-smooth-dnd'
+import type { SmoothDnD } from 'smooth-dnd'
 
 export const SmoothDndContainer = defineComponent({
   name: 'SmoothDndContainer',
+  setup() {
+    return {container: null as SmoothDnD | null}
+  },
   props: {
     // 容器方向，可以是 'horizontal' 或 'vertical'
     orientation: {
@@ -184,10 +188,6 @@ export const SmoothDndContainer = defineComponent({
       onDragMove
     };
     
-    return h(
-      Container,
-      containerProps,
-      this.$slots.default?.()
-    )
+    return h(Container, containerProps as Record<string, unknown>, this.$slots.default?.())
   }
 })

@@ -2,7 +2,7 @@
  * @Author: sdp-maker 19179977082@163.com
  * @Date: 2025-10-22 15:19:24
  * @LastEditors: sdp-maker 19179977082@163.com
- * @LastEditTime: 2025-10-22 15:24:55
+ * @LastEditTime: 2025-10-23 14:55:31
  * @FilePath: \LowCode\apps\builder\src\components\SmoothDnD\SmoothDndDraggable.ts
  * @Description: SmoothDnD 可拖拽元素组件，用于包装可拖拽的内容
  */
@@ -109,10 +109,6 @@ export const SmoothDndDraggable = defineComponent({
       onTouchEnd
     };
     
-    return h(
-      Draggable,
-      draggableProps,
-      this.$slots.default?.()
-    )
+    return h(Draggable, draggableProps as Record<string, unknown>, this.$slots.default?.())
   }
 })
