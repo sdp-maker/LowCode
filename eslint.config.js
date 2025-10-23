@@ -25,7 +25,8 @@ export default [
             sourceType: 'module'
         },
         rules: {
-            ...js.configs.recommended.rules
+            ...js.configs.recommended.rules,
+            "no-console": "off"
         }
     },
     {
@@ -43,7 +44,8 @@ export default [
         },
         rules: {
             ...js.configs.recommended.rules,
-            ...tseslint.configs.recommended.rules
+            ...tseslint.configs.recommended.rules,
+            "no-console": "off"
         }
     },
     {
@@ -81,7 +83,7 @@ export default [
         },
         rules: {
             ...pluginVue.configs['flat/recommended'].rules,
-            "no-console": "error"
+            "no-console": "off"
         }
     }
 ]

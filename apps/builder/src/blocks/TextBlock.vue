@@ -7,11 +7,47 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup lang="ts">
+import { computed } from 'vue'
 
+const props = defineProps<{
+    content?: string
+    align?: 'left' | 'center' | 'right'
+    fontSize?: number
+    color?: string
+    backgroundColor?: string
+}>()
+
+const textStyle = computed(() => {
+    console.log('TextBlock props:', props)
+    return {
+        textAlign: props.align || 'left',
+        fontSize: `${props.fontSize || 24}px`,
+        color: props.color || '#000000',
+        backgroundColor: props.backgroundColor || 'transparent'
+    }
+})
 </script>
 
 <template>
-    <div>text</div>
+    <div class="text-block">
+        <h1 :style="textStyle">
+            {{ content || 'Text Block' }}
+        </h1>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.text-block {
+    @apply p-4 rounded-lg border border-gray-200;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.text-block h1 {
+    @apply font-bold m-0 p-0;
+    width: 100%;
+}
+</style>

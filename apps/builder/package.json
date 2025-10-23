@@ -28,6 +28,7 @@
     "smooth-dnd": "^0.12.1",
     "veaury": "^2.4.2",
     "vue": "^3.5.22",
+    "vue-draggable-next": "^2.3.0",
     "vue-echarts": "^6.7.3",
     "vue-router": "^4.5.1",
     "vue3-smooth-dnd": "^0.0.6",

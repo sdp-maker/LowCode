@@ -63,5 +63,31 @@ export type ButtonBlock = BaseBlock & {
   }
 }
 
+export type NotesBlock = BaseBlock & {
+  type: 'notes'
+  props: { content: string }
+}
+
+export type ViewBlock = BaseBlock & {
+  type: 'view'
+  props: {} // View 容器通常没有自己的 props
+}
+
+export type FormBlock = BaseBlock & {
+  type: 'form'
+  props: {
+    fields: { name: string; type: string; label: string }[]
+  }
+}
+
 // 联合类型，支持所有块类型
-export type Block = HeroTitleBlock | ImageBlock | QuoteBlock | TextBlock | ButtonBlock | BaseBlock
+export type Block = 
+  | HeroTitleBlock 
+  | ImageBlock 
+  | QuoteBlock 
+  | TextBlock 
+  | ButtonBlock 
+  | NotesBlock
+  | ViewBlock
+  | FormBlock
+  | BaseBlock

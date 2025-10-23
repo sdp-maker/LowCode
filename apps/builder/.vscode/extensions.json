@@ -1,7 +1,7 @@
 {
   "recommendations": [
-    "Vue.volar",
-    "vitest.explorer",
-    "esbenp.prettier-vscode"
+    "bradlc.vscode-tailwindcss",
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin"
   ]
 }

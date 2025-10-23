@@ -8,34 +8,38 @@
 -->
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
-import type { BaseBlock } from '@/types/block'
+import type { Block } from '@/types/block'
+
+// 导入所有物料组件
 import ButtonBlock from './ButtonBlock.vue'
 import TextBlock from './TextBlock.vue'
 import ImageBlock from './ImageBlock.vue'
 import ChartBlock from './ChartBlock.vue'
+import NotesBlock from './NotesBlock.vue'
+import ViewBlock from './ViewBlock.vue'
+import FormBlock from './FormBlock.vue'
+import QuoteBlock from './QuoteBlock.vue'
 
-const props = defineProps<
-    { block: Pick<BaseBlock, 'type'> }>()
-
+const props = defineProps<{ block: Block }>()
 
 const component = computed(() => {
     switch (props.block.type) {
-        case 'button':
-            return ButtonBlock
-        case 'text':
-            return TextBlock
-        case 'image':
-            return ImageBlock
-        case 'chart':
-            return ChartBlock
+        case 'heroTitle': return TextBlock
+        case 'quote': return QuoteBlock
+        case 'chart': return ChartBlock
+        case 'image': return ImageBlock
+        case 'notes': return NotesBlock
+        case 'view': return ViewBlock
+        case 'button': return ButtonBlock
+        case 'form': return FormBlock
+        case 'text': return TextBlock
+        default: return TextBlock
     }
 })
 </script>
 
 <template>
-    <div>
-        <component :is="component" />
-    </div>
+    <component :is="component" v-bind="props.block.props" />
 </template>
 
 <style scoped></style>

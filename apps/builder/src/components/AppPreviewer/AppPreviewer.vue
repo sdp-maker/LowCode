@@ -7,30 +7,111 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup lang="ts">
-import { ref, h } from 'vue'
-import { SmoothDndContainer } from "@/components/SmoothDnd/SmoothDndContainer"
-import { SmoothDndDraggable } from "@/components/SmoothDnd/SmoothDndDraggable"
+import { ref, watch } from 'vue'
+// import { VueDraggableNext } from "vue-draggable-next"
 import { createBlock } from "@/blocks"
 import type { Block } from "@/types/block"
-import { defineAsyncComponent } from 'vue'
 import BlockRenderer from '@/blocks/BlockRenderer.vue'
+import { useEditorStore } from '@/stores/editor'
+
+const editorStore = useEditorStore()
+
+// 接收 props
+const props = defineProps<{
+  blocks: Block[]
+}>()
+
 // 预览区域的组件列表
-const previewBlocks = ref<Block[]>([])
+const previewBlocks = ref<Block[]>(props.blocks)
+
+// 监听 props.blocks 的变化，同步更新 previewBlocks
+watch(() => props.blocks, (newBlocks) => {
+  console.log('AppPreviewer: props.blocks changed, updating previewBlocks:', newBlocks)
+  previewBlocks.value = [...newBlocks]
+}, { deep: true })
 
 // 处理拖拽放置事件
-const handleDrop = (result: any) => {
-  if (result.addedIndex !== null && result.payload) {
-    // 根据 payload 创建新的组件实例
-    const newBlock = createBlock(result.payload.type, result.payload.defaultProps)
-    if (newBlock) {
-      previewBlocks.value.splice(result.addedIndex, 0, newBlock)
+const handleDrop = (event: DragEvent) => {
+  event.preventDefault()
+  const data = event.dataTransfer?.getData('application/json')
+  if (data) {
+    try {
+      const blockDef = JSON.parse(data)
+      const newBlock = createBlock(blockDef.type)
+      if (newBlock) {
+        previewBlocks.value.push(newBlock)
+      }
+    } catch (error) {
+      // 忽略解析错误
     }
   }
 }
 
-// 获取子元素载荷
-const getChildPayload = (index: number) => {
-  return previewBlocks.value[index]
+// 处理拖拽进入事件
+const handleDragOver = (event: DragEvent) => {
+  event.preventDefault()
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = 'copy'
+  }
+}
+
+// 拖拽状态
+const draggedIndex = ref<number | null>(null)
+
+// 处理组件内部拖拽开始
+const handleBlockDragStart = (event: DragEvent, index: number) => {
+  draggedIndex.value = index
+  if (event.dataTransfer) {
+    event.dataTransfer.setData('text/plain', index.toString())
+    event.dataTransfer.effectAllowed = 'move'
+  }
+  // 添加拖拽样式
+  if (event.target instanceof HTMLElement) {
+    event.target.style.opacity = '0.5'
+  }
+}
+
+// 处理组件内部拖拽悬停
+const handleBlockDragOver = (event: DragEvent) => {
+  event.preventDefault()
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = 'move'
+  }
+}
+
+// 处理组件内部拖拽放置
+const handleBlockDrop = (event: DragEvent, dropIndex: number) => {
+  event.preventDefault()
+  const dragIndex = draggedIndex.value
+
+  if (dragIndex !== null && dragIndex !== dropIndex) {
+    // 创建新的数组来避免响应式问题
+    const newBlocks = [...previewBlocks.value]
+    const draggedBlock = newBlocks[dragIndex]
+
+    // 移除拖拽的元素
+    newBlocks.splice(dragIndex, 1)
+
+    // 计算新的插入位置
+    const newDropIndex = dragIndex < dropIndex ? dropIndex - 1 : dropIndex
+
+    // 插入到新位置
+    if (draggedBlock) {
+      newBlocks.splice(newDropIndex, 0, draggedBlock)
+    }
+
+    // 更新数组
+    previewBlocks.value = newBlocks
+  }
+}
+
+// 处理组件内部拖拽结束
+const handleBlockDragEnd = (event: DragEvent) => {
+  draggedIndex.value = null
+  // 恢复样式
+  if (event.target instanceof HTMLElement) {
+    event.target.style.opacity = '1'
+  }
 }
 //远程物料
 // const loadComponent = async () => {
@@ -40,40 +121,43 @@ const getChildPayload = (index: number) => {
 // }
 // const txt = defineAsyncComponent(() => loadComponent())
 
-const blocks = ref([
-  {
-    type: 'chart',
-    id: '0'
-  },
-  
-{
-  type: 'button',
-  id: '1'
-}, {
-  type: 'text',
-  id: '2'
-}, {
-  type: 'image',
-  id: '3'
-}])
+// const blocks = ref([
+//   {
+//     type: 'chart',
+//     id: '0'
+//   },
+
+//   {
+//     type: 'button',
+//     id: '1'
+//   }, {
+//     type: 'text',
+//     id: '2'
+//   }, {
+//     type: 'image',
+//     id: '3'
+//   }])
+
+function handleBlockClick(block: Block) {
+  editorStore.selectBlock(block)
+}
 </script>
 
 <template>
- <div class="app-previewer">
-  <SmoothDndContainer 
-    group-name="blocks" 
-    orientation="vertical" 
-    :on-drop="handleDrop"
-    :get-child-payload="getChildPayload"
-    :drop-placeholder="{ className: 'drop-placeholder', animationDuration: '150ms', showOnTop: true }"
-  >
-    <SmoothDndDraggable v-for="block in blocks" :key="block.id">
-      
+  <div class="app-previewer" @click.self="editorStore.selectBlock(null)" @drop="handleDrop" @dragover="handleDragOver">
+    <div v-if="previewBlocks.length === 0" class="empty-state">
+      <div class="empty-icon">📦</div>
+      <p class="empty-text">从左侧拖拽组件到这里开始构建</p>
+    </div>
+    <div v-else class="preview-container">
+      <div v-for="(block, index) in previewBlocks" :key="block.id" class="preview-block"
+        @click="handleBlockClick(block)" :class="{ 'is-selected': editorStore.selectedBlock?.id === block.id }"
+        draggable="true" @dragstart="handleBlockDragStart($event, index)" @dragover="handleBlockDragOver($event)"
+        @drop="handleBlockDrop($event, index)" @dragend="handleBlockDragEnd($event)">
         <BlockRenderer :block="block" />
-    </SmoothDndDraggable>
-  </SmoothDndContainer>
-  <!-- <component :is="txt" /> -->
- </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -82,20 +166,62 @@ const blocks = ref([
   padding: 16px;
   flex: 1;
   height: 100%;
-  font-weight: bold;
+  position: relative;
+  overflow-y: auto;
 }
 
+/* 空状态样式 */
+.empty-state {
+  @apply flex flex-col items-center justify-center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.empty-icon {
+  @apply text-6xl mb-4 opacity-30;
+}
+
+.empty-text {
+  @apply text-gray-400 text-sm;
+}
+
+/* 预览块样式 */
 .preview-block {
-  @apply p-4 m-2 border border-gray-200 rounded bg-gray-50 hover:bg-gray-100 transition-colors;
+  @apply mb-2 border border-gray-200 rounded bg-white hover:border-blue-400 transition-colors cursor-move;
   min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
+.preview-block:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 拖拽占位符样式 */
 .drop-placeholder {
   @apply border-2 border-dashed border-blue-400 bg-blue-50 rounded;
   min-height: 60px;
-  margin: 8px 0;
+  margin-bottom: 8px;
+}
+
+.preview-block.is-selected {
+  @apply border-blue-500 border-2;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+}
+
+.preview-block[draggable="true"]:hover {
+  @apply border-blue-300;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.preview-block[draggable="true"]:active {
+  @apply border-blue-400;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.preview-container {
+  @apply min-h-full;
 }
 </style>

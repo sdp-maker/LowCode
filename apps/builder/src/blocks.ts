@@ -1,5 +1,15 @@
-import { h, type Component } from 'vue'
+import type { Component } from 'vue'
 import type { Block } from './types/block'
+
+// 导入其他物料组件
+import NotesBlock from './blocks/NotesBlock.vue'
+import ViewBlock from './blocks/ViewBlock.vue'
+import FormBlock from './blocks/FormBlock.vue'
+import QuoteBlock from './blocks/QuoteBlock.vue'
+import TextBlock from './blocks/TextBlock.vue'
+import ImageBlock from './blocks/ImageBlock.vue'
+import ButtonBlock from './blocks/ButtonBlock.vue'
+import ChartBlock from './blocks/ChartBlock.vue'
 
 // 块定义接口
 export interface BlockDefinition {
@@ -22,81 +32,84 @@ export interface BlockPlugin {
   uninstall?: (blockSuite: BlockSuite) => void
 }
 
-// 创建基础块组件
-const QuoteBlock = h("div", { 
-  class: 'quote-block p-4 border-l-4 border-blue-500 bg-gray-50 rounded',
-  style: 'font-style: italic; color: #666;'
-}, '这是一个引用块')
-
-const TextBlock = h("div", {
-  class: 'text-block p-4 bg-white border rounded',
-  style: 'min-height: 40px;'
-}, '文本内容')
-
-const ImageBlock = h("div", {
-  class: 'image-block p-4 bg-white border rounded flex items-center justify-center',
-  style: 'min-height: 100px; background-color: #f5f5f5;'
-}, '图片块')
-
-const ButtonBlock = h("button", {
-  class: 'button-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600',
-  style: 'border: none; cursor: pointer;'
-}, '按钮')
-
 // 基础块定义
 const baseBlocks: BlockDefinition[] = [
   {
-    type: 'quote',
-    name: '引用块',
-    description: '用于显示引用内容',
-    icon: '📝',
-    category: '文本',
-    material: QuoteBlock,
-    defaultProps: {
-      content: '这是一个引用块',
-      author: '',
-      style: 'default'
+    type: 'heroTitle',
+    name: 'Title',
+    icon: 'H',
+    category: 'Layout',
+    material: TextBlock, // 复用 TextBlock
+    defaultProps: { 
+      content: 'Hero Title',
+      align: 'center',
+      fontSize: 24,
+      color: '#000000',
+      backgroundColor: '#ffffff'
     }
   },
   {
-    type: 'text',
-    name: '文本块',
-    description: '用于显示文本内容',
-    icon: '📄',
-    category: '文本',
-    material: TextBlock,
-    defaultProps: {
-      content: '文本内容',
-      fontSize: 14,
-      color: '#333333'
-    }
+    type: 'quote',
+    name: 'Quote',
+    icon: '“',
+    category: 'Content',
+    material: QuoteBlock,
+    defaultProps: {}
+  },
+  {
+    type: 'chart',
+    name: 'Charts',
+    icon: '📊',
+    category: 'Data',
+    material: ChartBlock,
+    defaultProps: {}
   },
   {
     type: 'image',
-    name: '图片块',
-    description: '用于显示图片',
+    name: 'Image',
     icon: '🖼️',
-    category: '媒体',
+    category: 'Media',
     material: ImageBlock,
-    defaultProps: {
-      src: '',
-      alt: '图片',
-      width: 200,
-      height: 150
-    }
+    defaultProps: { src: 'https://picsum.photos/200/300' }
+  },
+  {
+    type: 'notes',
+    name: 'Notes',
+    icon: '📝',
+    category: 'Content',
+    material: NotesBlock,
+    defaultProps: {}
+  },
+  {
+    type: 'view',
+    name: 'View',
+    icon: '🖼️',
+    category: 'Layout',
+    material: ViewBlock,
+    defaultProps: {}
   },
   {
     type: 'button',
-    name: '按钮块',
-    description: '可点击的按钮',
+    name: 'Button',
     icon: '🔘',
-    category: '交互',
+    category: 'Action',
     material: ButtonBlock,
-    defaultProps: {
-      text: '按钮',
-      type: 'primary',
-      size: 'medium'
+    defaultProps: { 
+      buttonText: 'Click me',
+      buttonType: 'primary',
+      width: 120,
+      height: 40,
+      backgroundColor: '#3b82f6',
+      color: '#ffffff'
     }
+  },
+  {
+    type: 'form',
+    name: 'Form',
+    icon: '📋',
+    category: 'Action',
+    material: FormBlock,
+    defaultProps: {}
   }
 ]
 
