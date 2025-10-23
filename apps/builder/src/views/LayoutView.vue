@@ -21,6 +21,9 @@ import AppRightPanel from '@/components/AppRightPanel/AppRightPanel.vue'
 
 <style scoped>
 .layout-wrapper {
-  @apply flex h-screen bg-gray-100;
+  display: grid;
+  grid-template-columns: 256px 1fr 320px;
+  height: 100%;
+  background-color: #f3f4f6;
 }
 </style>

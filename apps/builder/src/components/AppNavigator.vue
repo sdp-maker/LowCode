@@ -26,35 +26,29 @@ import IconSettings from './icons/IconSettings.vue';
               <h1 class="text-xl font-semibold text-gray-900">低代码平台</h1>
             </div>
           </div>
-          
+
           <!-- 中间：导航菜单 -->
           <nav class="flex items-center space-x-1">
-            <RouterLink 
-              to="/app/dataSource" 
+            <RouterLink to="/app/dataSource"
               class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
-              active-class="bg-indigo-50 text-indigo-600 shadow-sm"
-            >
+              active-class="bg-indigo-50 text-indigo-600 shadow-sm">
               <IconDatabase :size="16" class="flex-shrink-0" />
               <span>数据源</span>
             </RouterLink>
-            <RouterLink 
-              to="/app/layout" 
+            <RouterLink to="/app/layout"
               class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
-              active-class="bg-indigo-50 text-indigo-600 shadow-sm"
-            >
+              active-class="bg-indigo-50 text-indigo-600 shadow-sm">
               <IconLayout :size="16" class="flex-shrink-0" />
               <span>布局</span>
             </RouterLink>
-            <RouterLink 
-              to="/app/actions" 
+            <RouterLink to="/app/actions"
               class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
-              active-class="bg-indigo-50 text-indigo-600 shadow-sm"
-            >
+              active-class="bg-indigo-50 text-indigo-600 shadow-sm">
               <IconAction :size="16" class="flex-shrink-0" />
               <span>动作</span>
             </RouterLink>
           </nav>
-          
+
           <!-- 右侧：设置按钮 -->
           <div class="flex items-center">
             <button class="p-2 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors">

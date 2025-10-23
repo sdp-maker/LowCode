@@ -8,10 +8,10 @@
 -->
 <script setup lang="ts">
 import AppNavigator from '@/components/AppNavigator.vue'
-import {RouterView} from 'vue-router'
+import { RouterView } from 'vue-router'
 </script>
 <template>
-  <div class="app-wrapper"> 
+  <div class="app-wrapper">
     <header>
       <AppNavigator />
     </header>
@@ -29,6 +29,7 @@ import {RouterView} from 'vue-router'
   height: 100%;
   width: 100%;
 }
+
 main {
   height: calc(100% - 48px);
   overflow-y: auto;
