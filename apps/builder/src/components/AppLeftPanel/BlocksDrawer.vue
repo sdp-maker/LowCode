@@ -24,13 +24,14 @@ const getChildPayload = (index: number) => blocks[index]
       <h3 class="header-title">组件库</h3>
     </div>
     <div class="drawer-content">
-      <SmoothDndContainer behaviour="copy" group-name="blocks" orientation="vertical" :get-child-payload="getChildPayload">
+      <SmoothDndContainer behaviour="copy" group-name="blocks" orientation="vertical"
+        :get-child-payload="getChildPayload" class="components-grid">
         <SmoothDndDraggable v-for="block in blocks" :key="block.type" class="component-item">
           <div class="component-icon">{{ block.icon }}</div>
           <div class="component-name">{{ block.name }}</div>
         </SmoothDndDraggable>
       </SmoothDndContainer>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -48,31 +49,47 @@ const getChildPayload = (index: number) => blocks[index]
 }
 
 .drawer-content {
-  @apply flex-1 overflow-auto p-2;
-  /* 美化滚动条 */
+  @apply flex-1 p-2;
+  overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-color: rgba(203, 213, 225, 0.8) rgba(241, 245, 249, 0.5);
 }
 
-/* Webkit 滚动条样式 */
 .drawer-content::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .drawer-content::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 3px;
+  background: rgba(248, 250, 252, 0.9);
+  border-radius: 4px;
+  margin: 2px 0;
+  border: 1px solid rgba(226, 232, 240, 0.3);
 }
 
 .drawer-content::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 3px;
-  transition: background-color 0.2s;
+  background: linear-gradient(180deg, rgba(203, 213, 225, 0.9) 0%, rgba(148, 163, 184, 0.9) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(203, 213, 225, 0.3);
+  transition: all 0.2s ease;
 }
 
 .drawer-content::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8;
+  background: linear-gradient(180deg, rgba(148, 163, 184, 1) 0%, rgba(100, 116, 139, 1) 100%);
+  border-color: rgba(148, 163, 184, 0.5);
+  transform: scaleX(1.1);
 }
+
+.drawer-content::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, rgba(100, 116, 139, 1) 0%, rgba(71, 85, 105, 1) 100%);
+  border-color: rgba(100, 116, 139, 0.7);
+}
+
+.components-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
 
 .component-category {
   @apply mb-4;
@@ -86,8 +103,11 @@ const getChildPayload = (index: number) => blocks[index]
   @apply grid grid-cols-2 gap-2;
 }
 
+
 .component-item {
   @apply flex flex-col items-center justify-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-move transition-colors;
+  min-height: 80px;
+  margin-bottom: 8px;
 }
 
 .component-icon {

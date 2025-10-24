@@ -11,7 +11,7 @@
 </script>
 
 <template>
- <div class="navigation-drawer h-full flex flex-col">
+ <div class="navigation-drawer h-full flex flex-col h-[200px]">
    <div class="drawer-header">
      <h3 class="header-title">导航</h3>
    </div>
@@ -20,16 +20,12 @@
 </template>
 
 <style scoped>
-.navigation-drawer {
-  @apply bg-white border-b border-gray-200;
-}
 
-.drawer-header {
-  @apply px-4 py-3 border-b border-gray-100;
-}
+
+
 
 .header-title {
-  @apply text-sm font-semibold text-gray-800 m-0;
+  @apply text-sm font-semibold text-gray-800;
 }
 
 .drawer-content {

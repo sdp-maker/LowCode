@@ -37,7 +37,7 @@ const handleReorderComponents = (blocks: Block[]) => {
 <template>
   <div class="app-left-panel">
     <div class="panel-section">
-      <h2 class="section-title">导航</h2>
+
       <NavigationDrawer />
     </div>
     <div class="panel-section components-section">
@@ -60,7 +60,9 @@ const handleReorderComponents = (blocks: Block[]) => {
 .components-section {
   @apply flex-1 flex flex-col border-t border-gray-200;
   min-height: 0;
-  /*  确保 flex 子元素可以收缩 */
+  /* 确保 flex 子元素可以收缩 */
+  overflow: hidden;
+  /* 防止内容溢出 */
 }
 
 .section-title {

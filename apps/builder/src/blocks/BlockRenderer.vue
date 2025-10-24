@@ -19,6 +19,10 @@ import NotesBlock from './NotesBlock.vue'
 import ViewBlock from './ViewBlock.vue'
 import FormBlock from './FormBlock.vue'
 import QuoteBlock from './QuoteBlock.vue'
+import CardBlock from './CardBlock.vue'
+import ListBlock from './ListBlock.vue'
+import ContainerBlock from './ContainerBlock.vue'
+import SeparatorBlock from './SeparatorBlock.vue'
 
 const props = defineProps<{ block: Block }>()
 
@@ -26,13 +30,21 @@ const component = computed(() => {
     switch (props.block.type) {
         case 'heroTitle': return TextBlock
         case 'quote': return QuoteBlock
-        case 'chart': return ChartBlock
         case 'image': return ImageBlock
         case 'notes': return NotesBlock
         case 'view': return ViewBlock
         case 'button': return ButtonBlock
         case 'form': return FormBlock
         case 'text': return TextBlock
+        case 'card': return CardBlock
+        case 'list': return ListBlock
+        case 'container': return ContainerBlock
+        case 'separator': return SeparatorBlock
+        // 新增图表类型
+        case 'lineChart': return ChartBlock
+        case 'pieChart': return ChartBlock
+        case 'barChart': return ChartBlock
+        case 'radialChart': return ChartBlock
         default: return TextBlock
     }
 })

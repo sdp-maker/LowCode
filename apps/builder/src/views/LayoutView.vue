@@ -49,7 +49,7 @@ const handleReorderComponents = (blocks: Block[]) => {
 .layout-wrapper {
   display: grid;
   grid-template-columns: 256px 1fr 320px;
-  height: 100%;
+  height: 100vh;
   background-color: #f3f4f6;
 }
 </style>

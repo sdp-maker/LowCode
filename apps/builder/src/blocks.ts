@@ -10,6 +10,10 @@ import TextBlock from './blocks/TextBlock.vue'
 import ImageBlock from './blocks/ImageBlock.vue'
 import ButtonBlock from './blocks/ButtonBlock.vue'
 import ChartBlock from './blocks/ChartBlock.vue'
+import CardBlock from './blocks/CardBlock.vue'
+import ListBlock from './blocks/ListBlock.vue'
+import ContainerBlock from './blocks/ContainerBlock.vue'
+import SeparatorBlock from './blocks/SeparatorBlock.vue'
 
 // 块定义接口
 export interface BlockDefinition {
@@ -34,82 +38,271 @@ export interface BlockPlugin {
 
 // 基础块定义
 const baseBlocks: BlockDefinition[] = [
+  // 标题分类
   {
-    type: 'heroTitle',
-    name: 'Title',
-    icon: 'H',
-    category: 'Layout',
-    material: TextBlock, // 复用 TextBlock
-    defaultProps: { 
-      content: 'Hero Title',
-      align: 'center',
-      fontSize: 24,
-      color: '#000000',
-      backgroundColor: '#ffffff'
+    type: 'simpleTitle',
+    name: '简单标题',
+    icon: 'T',
+    category: '标题',
+    material: TextBlock,
+    defaultProps: { content: '简单标题', fontSize: 22, align: 'left' },
+  },
+  {
+    type: 'imageTitle',
+    name: '图片标题',
+    icon: '🏞️',
+    category: '标题',
+    material: ViewBlock, // 使用 ViewBlock 组合图片和文字
+    defaultProps: { content: '图片标题' },
+  },
+  // 系列分类
+  {
+    type: 'card',
+    name: '卡片',
+    icon: '💳',
+    category: '系列',
+    material: CardBlock,
+    defaultProps: {
+      title: '卡片标题',
+      description: '这是卡片的描述内容，可以包含详细信息。',
+      showImage: false,
+      showButton: true,
+      buttonText: '了解更多',
+      buttonType: 'primary',
+      backgroundColor: '#ffffff',
+      borderColor: '#e5e7eb',
+      borderRadius: 8,
+      padding: 16,
+      shadow: true
+    },
+  },
+  {
+    type: 'list',
+    name: '列表',
+    icon: '📄',
+    category: '系列',
+    material: ListBlock,
+    defaultProps: {
+      title: '列表标题',
+      items: ['列表项 1', '列表项 2', '列表项 3'],
+      listType: 'unordered',
+      showIcon: true,
+      icon: '•',
+      itemSpacing: 8,
+      textColor: '#374151',
+      padding: 16
+    },
+  },
+  // 移除旧的、通用的图表和数据网格
+  // 布局分类
+  {
+    type: 'container',
+    name: '容器',
+    icon: '⬜',
+    category: '布局',
+    material: ContainerBlock,
+    defaultProps: {
+      title: '容器',
+      placeholder: '拖拽组件到这里',
+      backgroundColor: '#ffffff',
+      borderColor: '#e5e7eb',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderRadius: 8,
+      padding: 16,
+      minHeight: 120,
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'stretch',
+      gap: 8
+    },
+  },
+  {
+    type: 'separator',
+    name: '分隔符',
+    icon: '⎯',
+    category: '布局',
+    material: SeparatorBlock,
+    defaultProps: {
+      separatorType: 'line',
+      color: '#e5e7eb',
+      thickness: 1,
+      width: 100,
+      style: 'solid',
+      marginTop: 16,
+      marginBottom: 16
+    },
+  },
+  // 其他组件
+  {
+    type: 'quote',
+    name: '引言',
+    icon: '"',
+    category: '内容',
+    material: QuoteBlock,
+    defaultProps: {
+      content: '这是一段引言内容，用于突出显示重要的文字或观点。',
+      author: '作者姓名',
+      source: '来源',
+      authorPrefix: '—',
+      showIcon: true,
+      icon: '"',
+      quoteStyle: 'default',
+      backgroundColor: '#f9fafb',
+      borderColor: '#6b7280',
+      textColor: '#374151',
+      fontSize: 16,
+      padding: 16,
+      borderWidth: 4,
+      italic: true
     }
   },
   {
-    type: 'quote',
-    name: 'Quote',
-    icon: '“',
-    category: 'Content',
-    material: QuoteBlock,
-    defaultProps: {}
-  },
-  {
-    type: 'chart',
-    name: 'Charts',
-    icon: '📊',
-    category: 'Data',
-    material: ChartBlock,
-    defaultProps: {}
-  },
-  {
     type: 'image',
-    name: 'Image',
+    name: '图片',
     icon: '🖼️',
-    category: 'Media',
+    category: '内容',
     material: ImageBlock,
     defaultProps: { src: 'https://picsum.photos/200/300' }
   },
   {
     type: 'notes',
-    name: 'Notes',
+    name: '笔记',
     icon: '📝',
-    category: 'Content',
+    category: '内容',
     material: NotesBlock,
-    defaultProps: {}
-  },
-  {
-    type: 'view',
-    name: 'View',
-    icon: '🖼️',
-    category: 'Layout',
-    material: ViewBlock,
-    defaultProps: {}
+    defaultProps: {
+      title: '笔记标题',
+      content: '这是一条笔记内容。你可以在这里记录重要信息、想法或提醒事项。',
+      icon: '📝',
+      showHeader: true,
+      showTimestamp: false,
+      noteType: 'note',
+      borderRadius: 8,
+      padding: 16,
+      fontSize: 14
+    }
   },
   {
     type: 'button',
-    name: 'Button',
+    name: '按钮',
     icon: '🔘',
-    category: 'Action',
+    category: '操作',
     material: ButtonBlock,
-    defaultProps: { 
+    defaultProps: {
       buttonText: 'Click me',
       buttonType: 'primary',
-      width: 120,
-      height: 40,
-      backgroundColor: '#3b82f6',
-      color: '#ffffff'
     }
   },
   {
     type: 'form',
-    name: 'Form',
+    name: '表单',
     icon: '📋',
-    category: 'Action',
+    category: '操作',
     material: FormBlock,
     defaultProps: {}
+  },
+  // 新增具体的图表类型
+  {
+    type: 'lineChart',
+    name: '折线图',
+    icon: '📈',
+    category: '图表',
+    material: ChartBlock,
+    defaultProps: {
+      chartType: 'line',
+      chartData: {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line'
+        }]
+      }
+    }
+  },
+  {
+    type: 'pieChart',
+    name: '饼图',
+    icon: '🥧',
+    category: '图表',
+    material: ChartBlock,
+    defaultProps: {
+      chartType: 'pie',
+      chartData: {
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            data: [
+              { value: 335, name: '直接访问' },
+              { value: 310, name: '邮件营销' },
+              { value: 234, name: '联盟广告' },
+              { value: 135, name: '视频广告' },
+              { value: 1548, name: '搜索引擎' }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    type: 'barChart',
+    name: '条形图',
+    icon: '📊',
+    category: '图表',
+    material: ChartBlock,
+    defaultProps: {
+      chartType: 'bar',
+      chartData: {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [120, 200, 150, 80, 70, 110, 130],
+          type: 'bar'
+        }]
+      }
+    }
+  },
+  {
+    type: 'radialChart',
+    name: '径向图',
+    icon: '🎯',
+    category: '图表',
+    material: ChartBlock,
+    defaultProps: {
+      chartType: 'radial',
+      chartData: {
+        title: {
+          text: '径向图'
+        },
+        polar: {},
+        angleAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu'],
+          z: 10
+        },
+        radiusAxis: {},
+        series: [{
+          type: 'bar',
+          data: [1, 2, 3, 4],
+          coordinateSystem: 'polar',
+          name: 'A',
+          stack: 'a'
+        }]
+      }
+    }
   }
 ]
 

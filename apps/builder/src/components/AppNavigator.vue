@@ -60,7 +60,7 @@ import IconSettings from './icons/IconSettings.vue';
     </header>
 
     <!-- 主内容区域 -->
-    <div class=" pb-6">
+    <div class=" ">
       <div class="bg-white  shadow-sm  h-full overflow-hidden">
         <RouterView />
       </div>
