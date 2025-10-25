@@ -8,13 +8,16 @@
 -->
 <template>
     <div class="flow-editor">
-        <div class="flow-container" @click="closeAllMenus">
+        <div class="flow-container">
             <VueFlow v-model="elements" class="basic-flow" :default-viewport="{ zoom: 1 }" :min-zoom="0.2" :max-zoom="4"
                 @connect="onConnect">
 
                 <!-- 自定义输入节点 -->
                 <template #node-input="{ data, id }">
                     <div class="custom-node input-node">
+                        <!-- 连接点 -->
+                        <Handle type="source" :position="Position.Right" class="custom-handle" />
+
                         <div class="node-header">
                             {{ data.label }}
                             <div class="node-menu" @click.stop="toggleNodeMenu(id, $event)">
@@ -38,6 +41,10 @@
                 <!-- 自定义处理节点 -->
                 <template #node-default="{ data, id }">
                     <div class="custom-node process-node">
+                        <!-- 连接点 -->
+                        <Handle type="target" :position="Position.Left" class="custom-handle" />
+                        <Handle type="source" :position="Position.Right" class="custom-handle" />
+
                         <div class="node-header">
                             {{ data.label }}
                             <div class="node-menu" @click.stop="toggleNodeMenu(id, $event)">
@@ -67,6 +74,10 @@
                 <!-- 自定义输出节点 -->
                 <template #node-output="{ data, id }">
                     <div class="custom-node output-node">
+                        <!-- 连接点 -->
+                        <Handle type="target" :position="Position.Left" class="custom-handle" />
+                        <Handle type="source" :position="Position.Right" class="custom-handle" />
+
                         <div class="node-header">
                             {{ data.label }}
                             <div class="node-menu" @click.stop="toggleNodeMenu(id, $event)">
@@ -85,41 +96,54 @@
                     </div>
                 </template>
 
-                <!-- 节点选择面板 -->
-                <div class="node-panel" :class="{ 'panel-open': showNodePanel }">
-                    <button class="panel-toggle" @click="toggleNodePanel">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                    </button>
+            </VueFlow>
 
-                    <div v-if="showNodePanel" class="node-options">
-                        <div class="node-option" @click="addSpecificNode('input')" title="添加输入节点">
-                            <div class="node-icon input-icon">📥</div>
-                            <span>输入</span>
-                        </div>
-                        <div class="node-option" @click="addSpecificNode('math')" title="添加数学运算节点">
-                            <div class="node-icon math-icon">🔢</div>
-                            <span>运算</span>
-                        </div>
-                        <div class="node-option" @click="addSpecificNode('condition')" title="添加条件判断节点">
-                            <div class="node-icon condition-icon">❓</div>
-                            <span>条件</span>
-                        </div>
-                        <div class="node-option" @click="addSpecificNode('output')" title="添加输出节点">
-                            <div class="node-icon output-icon">📤</div>
-                            <span>输出</span>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="node-option" @click="autoLayoutNodes" title="自动排列节点">
-                            <div class="node-icon layout-icon">🎯</div>
-                            <span>自动布局</span>
-                        </div>
+            <!-- 简化的节点面板 -->
+            <div style="position: absolute; top: 24px; right: 24px; z-index: 2000;">
+                <button @click="toggleNodePanel" style="
+                            width: 56px; 
+                            height: 56px; 
+                            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
+                            border: none; 
+                            border-radius: 50%; 
+                            color: white; 
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+
+                <div v-if="showNodePanel" style="
+                         position: absolute;
+                         top: 70px;
+                         right: 0;
+                         background: white;
+                         border: 1px solid #ccc;
+                         border-radius: 8px;
+                         padding: 12px;
+                         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                         min-width: 120px;
+                         z-index: 2001;
+                     ">
+                    <div @click="addSpecificNode('input')" style="padding: 8px; cursor: pointer; border-radius: 4px;"
+                        onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">
+                        📥 输入节点
+                    </div>
+                    <div @click="addSpecificNode('math')" style="padding: 8px; cursor: pointer; border-radius: 4px;"
+                        onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">
+                        🔢 数学运算
+                    </div>
+                    <div @click="addSpecificNode('output')" style="padding: 8px; cursor: pointer; border-radius: 4px;"
+                        onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">
+                        📤 输出节点
                     </div>
                 </div>
-            </VueFlow>
+            </div>
         </div>
 
         <!-- 节点操作菜单 - 使用 Teleport 渲染到外部 -->
@@ -153,7 +177,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { VueFlow, useVueFlow } from '@vue-flow/core'
+import { VueFlow, useVueFlow, Handle, Position } from '@vue-flow/core'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import dagre from '@dagrejs/dagre'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -245,25 +269,27 @@ const onConnect = (params: Connection) => {
         target: params.target!,
         animated: true,
     }])
+
+    // 连接后重新计算所有数学节点
+    setTimeout(() => {
+        const mathNodes = elements.value.filter(el =>
+            'data' in el && el.data.nodeType === 'math'
+        ) as Node[]
+
+        mathNodes.forEach(node => {
+            calculateMathResult(node.id)
+        })
+    }, 100)
 }
 
-// 节点类型列表
-const nodeTypes = [
-    { type: 'input', label: '输入节点' },
-    { type: 'default', label: '数学运算' },
-    { type: 'default', label: '条件判断' },
-    { type: 'default', label: '数据处理' },
-    { type: 'default', label: '字符串处理' },
-    { type: 'default', label: '循环操作' },
-    { type: 'default', label: 'API调用' },
-    { type: 'output', label: '输出节点' }
-]
 
 let nodeCounter = 5 // 从5开始，因为已有4个初始节点
 
 // 切换节点面板
 const toggleNodePanel = () => {
+    console.log('toggleNodePanel clicked, current state:', showNodePanel.value)
     showNodePanel.value = !showNodePanel.value
+    console.log('new state:', showNodePanel.value)
     activeNodeMenu.value = null // 关闭任何打开的节点菜单
 }
 
@@ -428,6 +454,7 @@ const exportResult = (nodeId: string) => {
 
 // 添加特定类型的节点
 const addSpecificNode = (nodeType: string) => {
+    console.log('addSpecificNode called with type:', nodeType)
     const id = `node-${nodeCounter++}`
     let newNode: Node
 
@@ -487,7 +514,20 @@ const addSpecificNode = (nodeType: string) => {
     }
 
     addNodes([newNode])
+    console.log('Node added:', newNode)
+    ElMessage.success(`已添加${nodeType}节点`)
     showNodePanel.value = false // 添加后关闭面板
+
+    // 添加节点后重新计算所有数学节点
+    setTimeout(() => {
+        const mathNodes = elements.value.filter(el =>
+            'data' in el && el.data.nodeType === 'math'
+        ) as Node[]
+
+        mathNodes.forEach(node => {
+            calculateMathResult(node.id)
+        })
+    }, 200)
 }
 
 // 使用 dagre 进行自动布局
@@ -555,9 +595,18 @@ const updateNodeValue = (nodeId: string, key: string, value: any) => {
         const node = elements.value[nodeIndex] as Node
         node.data = { ...node.data, [key]: value }
 
-        // 如果是数学运算节点，自动计算结果
-        if (node.data.nodeType === 'math') {
-            calculateMathResult(nodeId)
+        console.log(`Node ${nodeId} updated: ${key} = ${value}`)
+
+        // 如果是输入节点或数学运算节点，重新计算所有相关的数学节点
+        if (node.data.nodeType === 'number-input' || node.data.nodeType === 'math') {
+            // 找到所有数学节点并重新计算
+            const mathNodes = elements.value.filter(el =>
+                'data' in el && el.data.nodeType === 'math'
+            ) as Node[]
+
+            mathNodes.forEach(mathNode => {
+                calculateMathResult(mathNode.id)
+            })
         }
     }
 }
@@ -567,94 +616,72 @@ const calculateMathResult = (mathNodeId: string) => {
     const mathNode = elements.value.find(el => el.id === mathNodeId && 'data' in el) as Node
     if (!mathNode) return
 
+    console.log('Calculating math result for node:', mathNodeId)
+
     // 找到连接到这个数学节点的输入节点
     const inputEdges = elements.value.filter(el =>
         'target' in el && el.target === mathNodeId
     ) as Edge[]
 
+    console.log('Input edges found:', inputEdges)
+
     const inputValues: number[] = []
     inputEdges.forEach(edge => {
         const inputNode = elements.value.find(el => el.id === edge.source && 'data' in el) as Node
         if (inputNode && inputNode.data.nodeType === 'number-input') {
-            inputValues.push(Number(inputNode.data.value) || 0)
+            const value = Number(inputNode.data.value) || 0
+            inputValues.push(value)
+            console.log(`Input from node ${inputNode.data.label}: ${value}`)
         }
     })
 
-    if (inputValues.length >= 2) {
-        let result = 0
-        const operation = mathNode.data.operation
-        const a = inputValues[0] || 0
-        const b = inputValues[1] || 0
+    console.log('All input values:', inputValues)
 
-        switch (operation) {
-            case '+':
-                result = a + b
-                break
-            case '-':
-                result = a - b
-                break
-            case '*':
-                result = a * b
-                break
-            case '/':
-                result = b !== 0 ? a / b : 0
-                break
+    if (inputValues.length >= 1) {
+        let result = inputValues[0] || 0
+        const operation = mathNode.data.operation
+
+        // 如果有多个输入值，依次进行运算
+        for (let i = 1; i < inputValues.length; i++) {
+            const nextValue = inputValues[i] || 0
+
+            switch (operation) {
+                case '+':
+                    result = result + nextValue
+                    break
+                case '-':
+                    result = result - nextValue
+                    break
+                case '*':
+                    result = result * nextValue
+                    break
+                case '/':
+                    result = nextValue !== 0 ? result / nextValue : result
+                    break
+            }
         }
 
         // 更新数学节点的结果
         mathNode.data.result = result
+        console.log(`Math result calculated: ${result}`)
 
         // 更新连接到数学节点的输出节点
         const outputEdges = elements.value.filter(el =>
             'source' in el && el.source === mathNodeId
         ) as Edge[]
 
+        console.log('Output edges found:', outputEdges)
+
         outputEdges.forEach(edge => {
             const outputNode = elements.value.find(el => el.id === edge.target && 'data' in el) as Node
             if (outputNode && outputNode.data.nodeType === 'result') {
                 outputNode.data.value = result
+                console.log(`Updated output node ${outputNode.data.label} with value: ${result}`)
             }
         })
     }
 }
 
-// 添加节点
-const addNode = () => {
-    const randomType = nodeTypes[Math.floor(Math.random() * nodeTypes.length)]
-    const id = `node-${nodeCounter++}`
-
-    let nodeData = { label: randomType.label }
-
-    // 根据节点类型设置不同的数据
-    if (randomType.type === 'input') {
-        nodeData = {
-            ...nodeData,
-            value: 0,
-            nodeType: 'number-input'
-        }
-    } else if (randomType.label === '数学运算') {
-        nodeData = {
-            ...nodeData,
-            operation: '+',
-            result: 0,
-            nodeType: 'math'
-        }
-    } else if (randomType.type === 'output') {
-        nodeData = {
-            ...nodeData,
-            value: 0,
-            nodeType: 'result'
-        }
-    }
-
-    const newNode: Node = {
-        id,
-        type: randomType.type,
-        position: { x: Math.random() * 600 + 100, y: Math.random() * 400 + 100 },
-        data: nodeData,
-    }
-    addNodes([newNode])
-}
 
 // 初始化时计算结果
 onMounted(() => {
@@ -701,7 +728,7 @@ watch(elements, () => {
     position: absolute;
     top: 24px;
     right: 24px;
-    z-index: 10;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -734,15 +761,20 @@ watch(elements, () => {
 }
 
 .node-options {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     gap: 8px;
-    background: white;
+    background: white !important;
     border-radius: 12px;
     padding: 12px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
+    border: 1px solid #e2e8f0 !important;
     animation: slideIn 0.2s ease-out;
+    z-index: 1001 !important;
+    position: relative;
+    min-width: 120px;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 @keyframes slideIn {
@@ -820,6 +852,31 @@ watch(elements, () => {
     color: #374151;
 }
 
+/* 外部节点面板样式 */
+.node-panel-external {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.node-options-external {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    animation: slideIn 0.2s ease-out;
+    min-width: 120px;
+}
+
 /* Vue Flow 基础样式 - 参考官方示例 */
 :deep(.vue-flow__background) {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -845,6 +902,22 @@ watch(elements, () => {
     opacity: 1;
 }
 
+/* 自定义连接点样式 */
+.custom-handle {
+    width: 12px !important;
+    height: 12px !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    border: 3px solid white !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.custom-handle:hover {
+    transform: scale(1.3) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4) !important;
+}
+
 :deep(.vue-flow__handle) {
     width: 12px;
     height: 12px;
@@ -861,11 +934,11 @@ watch(elements, () => {
 }
 
 :deep(.vue-flow__handle-source) {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
 }
 
 :deep(.vue-flow__handle-target) {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
 }
 
 /* 选中状态样式 */
