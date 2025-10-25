@@ -16,6 +16,11 @@
 import { applyReactInVue } from 'veaury'
 import ReactDataGridComponent from './react_app/ReactSouceContent.jsx'
 
+// 定义组件名称，用于keep-alive缓存
+defineOptions({
+    name: 'DataSourceContent'
+})
+
 // 将 React 组件包装为 Vue 组件
 const ReactDataGrid = applyReactInVue(ReactDataGridComponent)
 </script>

@@ -8,10 +8,15 @@
 -->
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import { cachedViews } from '@/composables/useKeepAlive'
 </script>
 
 <template>
-  <RouterView />
+  <RouterView v-slot="{ Component, route }">
+    <keep-alive :include="cachedViews">
+      <component :is="Component" :key="route.fullPath" />
+    </keep-alive>
+  </RouterView>
 </template>
 
 <style scoped></style>

@@ -8,6 +8,11 @@
 -->
 <script setup lang="ts">
 import DataSourceContent from '../components/DataSouceContent.vue/DataSouceContent.vue'
+
+// 定义组件名称，用于keep-alive缓存
+defineOptions({
+  name: 'DataSourceView'
+})
 </script>
 
 <template>

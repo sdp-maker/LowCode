@@ -13,6 +13,11 @@ import AppPreview from '@/components/AppPreviewer/AppPreviewer.vue'
 import AppRightPanel from '@/components/AppRightPanel/AppRightPanel.vue'
 import type { Block } from '@/types/block'
 
+// 定义组件名称，用于keep-alive缓存
+defineOptions({
+  name: 'LayoutView'
+})
+
 // 预览区的组件列表
 const previewBlocks = ref<Block[]>([])
 

@@ -30,22 +30,109 @@ if (typeof document !== 'undefined') {
   document.head.appendChild(style)
 }
 
+// 全局头像缓存 - 在组件外部定义，避免切换表格时丢失
+const globalImageCache = new Map()
+const globalLoadingCache = new Set()
+
+// 从localStorage恢复缓存
+const loadCacheFromStorage = () => {
+  try {
+    const cached = localStorage.getItem('avatar-cache')
+    if (cached) {
+      const cacheData = JSON.parse(cached)
+      Object.entries(cacheData).forEach(([url, dataUrl]) => {
+        globalImageCache.set(url, dataUrl)
+      })
+    }
+  } catch (error) {
+    console.log('无法从localStorage加载头像缓存:', error)
+  }
+}
+
+// 保存缓存到localStorage
+const saveCacheToStorage = () => {
+  try {
+    const cacheData = Object.fromEntries(globalImageCache)
+    localStorage.setItem('avatar-cache', JSON.stringify(cacheData))
+  } catch (error) {
+    console.log('无法保存头像缓存到localStorage:', error)
+  }
+}
+
+// 初始化时加载缓存
+loadCacheFromStorage()
+
 const ReactDataGrid = () => {
   // 当前选中的表格
   const [activeSheet, setActiveSheet] = useState('users')
   
-  // 懒加载相关状态
-  const [loadedRows, setLoadedRows] = useState(100) // 初始加载100行，适应大数据量
-  const [isLoading, setIsLoading] = useState(false)
+  // 为每个表格维护独立的状态
+  const [sheetStates, setSheetStates] = useState({
+    users: {
+      loadedRows: 100,
+      isLoading: false,
+      scrollPosition: { x: 0, y: 0 },
+      selectedRows: [],
+      sortConfig: null,
+      filterConfig: null
+    },
+    orders: {
+      loadedRows: 15,
+      isLoading: false,
+      scrollPosition: { x: 0, y: 0 },
+      selectedRows: [],
+      sortConfig: null,
+      filterConfig: null
+    },
+    foods: {
+      loadedRows: 18,
+      isLoading: false,
+      scrollPosition: { x: 0, y: 0 },
+      selectedRows: [],
+      sortConfig: null,
+      filterConfig: null
+    }
+  })
   
-  // 头像图片缓存 - 使用持久化缓存
-  const imageCache = React.useRef(new Map())
-  const loadingCache = React.useRef(new Set()) // 正在加载的URL集合
+  // 获取当前表格的状态
+  const getCurrentState = () => sheetStates[activeSheet]
+  
+  // 更新当前表格的状态
+  const updateCurrentState = (updates) => {
+    setSheetStates(prev => ({
+      ...prev,
+      [activeSheet]: { ...prev[activeSheet], ...updates }
+    }))
+  }
+  
+  // 懒加载相关状态 - 使用当前表格的状态
+  const currentState = getCurrentState()
+  const loadedRows = currentState.loadedRows
+  const isLoading = currentState.isLoading
+  
+  // 头像图片缓存 - 使用全局缓存，避免切换表格时丢失
+  const imageCache = React.useRef(globalImageCache)
+  const loadingCache = React.useRef(globalLoadingCache) // 正在加载的URL集合
   const [cacheVersion, setCacheVersion] = useState(0) // 用于强制重绘
+  
+  // DataEditor引用，用于恢复滚动位置
+  const dataEditorRef = React.useRef(null)
   
   // 预加载头像函数 - 带持久化缓存
   const preloadAvatar = useCallback((url, onLoad) => {
     if (!url || !url.startsWith('http')) return
+    
+    // 首先检查全局缓存
+    if (globalImageCache.has(url)) {
+      const base64 = globalImageCache.get(url)
+      const img = new Image()
+      img.onload = () => {
+        imageCache.current.set(url, img)
+        if (onLoad) onLoad(img)
+      }
+      img.src = base64
+      return
+    }
     
     // 如果已经缓存，直接返回
     if (imageCache.current.has(url)) {
@@ -67,7 +154,7 @@ const ReactDataGrid = () => {
       imageCache.current.set(url, img)
       loadingCache.current.delete(url)
       
-      // 将图片转换为base64并存储到localStorage（可选）
+      // 将图片转换为base64并存储到localStorage
       try {
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
@@ -75,9 +162,14 @@ const ReactDataGrid = () => {
         canvas.height = 64
         ctx.drawImage(img, 0, 0, 64, 64)
         const base64 = canvas.toDataURL('image/jpeg', 0.8)
-        localStorage.setItem(`avatar_${btoa(url)}`, base64)
+        // 使用encodeURIComponent处理包含中文字符的URL
+        const encodedUrl = encodeURIComponent(url)
+        localStorage.setItem(`avatar_${encodedUrl}`, base64)
+        
+        // 同时保存到全局缓存
+        globalImageCache.set(url, base64)
+        saveCacheToStorage()
       } catch (e) {
-        // localStorage可能已满，忽略错误
       }
       
       setCacheVersion(prev => prev + 1) // 触发重绘
@@ -95,7 +187,21 @@ const ReactDataGrid = () => {
   // 从localStorage恢复缓存的头像
   const restoreCachedAvatar = useCallback((url) => {
     try {
-      const base64 = localStorage.getItem(`avatar_${btoa(url)}`)
+      // 首先检查全局缓存
+      if (globalImageCache.has(url)) {
+        const base64 = globalImageCache.get(url)
+        const img = new Image()
+        img.onload = () => {
+          imageCache.current.set(url, img)
+          setCacheVersion(prev => prev + 1)
+        }
+        img.src = base64
+        return true
+      }
+      
+      // 然后检查localStorage
+      const encodedUrl = encodeURIComponent(url)
+      const base64 = localStorage.getItem(`avatar_${encodedUrl}`)
       if (base64) {
         const img = new Image()
         img.onload = () => {
@@ -222,13 +328,29 @@ const ReactDataGrid = () => {
   // 当前数据 - 根据懒加载状态返回部分数据
   const getCurrentData = () => {
     const fullData = sheetsData[activeSheet]
+    const currentState = getCurrentState()
     if (activeSheet === 'users') {
-      return fullData.slice(0, loadedRows)
+      return fullData.slice(0, currentState.loadedRows)
     }
     return fullData
   }
   
   const [data, setData] = useState(getCurrentData())
+
+  // 切换表格时恢复滚动位置和选择状态
+  React.useEffect(() => {
+    const currentState = getCurrentState()
+    if (dataEditorRef.current && currentState.scrollPosition) {
+      // 延迟恢复滚动位置，确保组件已渲染
+      setTimeout(() => {
+        try {
+          dataEditorRef.current.scrollTo(currentState.scrollPosition.x, currentState.scrollPosition.y)
+        } catch (error) {
+          console.log('无法恢复滚动位置:', error)
+        }
+      }, 100)
+    }
+  }, [activeSheet, data])
 
   // 预加载可见区域的头像
   React.useEffect(() => {
@@ -249,32 +371,41 @@ const ReactDataGrid = () => {
 
   // 懒加载更多数据
   const loadMoreData = useCallback(() => {
-    if (activeSheet !== 'users' || isLoading) return
+    const currentState = getCurrentState()
+    if (activeSheet !== 'users' || currentState.isLoading) return
     
     const fullData = sheetsData[activeSheet]
-    if (loadedRows >= fullData.length) return
+    if (currentState.loadedRows >= fullData.length) return
     
-    setIsLoading(true)
+    updateCurrentState({ isLoading: true })
     
     // 模拟网络延迟，每次加载更多数据
     setTimeout(() => {
-      const newLoadedRows = Math.min(loadedRows + 100, fullData.length) // 每次加载100行
-      setLoadedRows(newLoadedRows)
+      const newLoadedRows = Math.min(currentState.loadedRows + 100, fullData.length) // 每次加载100行
+      updateCurrentState({ 
+        loadedRows: newLoadedRows,
+        isLoading: false 
+      })
       setData(fullData.slice(0, newLoadedRows))
-      setIsLoading(false)
     }, 300) // 减少延迟时间
-  }, [activeSheet, isLoading, loadedRows])
+  }, [activeSheet, getCurrentState, updateCurrentState])
 
   // 处理可见区域变化，检测是否需要加载更多数据
   const handleScroll = useCallback((region) => {
-    if (activeSheet !== 'users' || isLoading) return
+    const currentState = getCurrentState()
+    if (activeSheet !== 'users' || currentState.isLoading) return
     
     const { y, height } = region
     const visibleEndRow = y + height
     const totalRows = sheetsData.users.length
     
+    // 保存滚动位置
+    updateCurrentState({
+      scrollPosition: { x: region.x || 0, y: y || 0 }
+    })
+    
     // 当可见区域接近已加载数据的末尾时，加载更多数据
-    if (visibleEndRow > loadedRows - 50 && loadedRows < totalRows) {
+    if (visibleEndRow > currentState.loadedRows - 50 && currentState.loadedRows < totalRows) {
       loadMoreData()
     }
     
@@ -288,7 +419,7 @@ const ReactDataGrid = () => {
         preloadAvatar(avatarUrl)
       }
     }
-  }, [activeSheet, isLoading, loadedRows, loadMoreData, data, preloadAvatar])
+  }, [activeSheet, getCurrentState, updateCurrentState, loadMoreData, data, preloadAvatar])
 
   // 根据当前表格动态定义列
   const getColumns = () => {
@@ -439,10 +570,10 @@ const ReactDataGrid = () => {
   const switchSheet = (sheetName) => {
     setActiveSheet(sheetName)
     
+    // 使用当前表格的状态来加载数据
+    const currentState = sheetStates[sheetName]
     if (sheetName === 'users') {
-      // 重置懒加载状态
-      setLoadedRows(100)
-      setData(sheetsData[sheetName].slice(0, 100))
+      setData(sheetsData[sheetName].slice(0, currentState.loadedRows))
     } else {
       setData(sheetsData[sheetName])
     }
@@ -961,89 +1092,57 @@ const ReactDataGrid = () => {
             <span>{columns.length} 列</span>
             {activeSheet === 'users' && (
               <span style={{ color: '#6b7280', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                {isLoading ? (
-                  <>
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ animation: 'spin 1s linear infinite' }}
-                    >
-                      <path
-                        d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        opacity="0.25"
-                      />
-                      <path
-                        d="M21 12C21 7.02944 16.9706 3 12 3"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    加载中...
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect
-                        x="3"
-                        y="4"
-                        width="18"
-                        height="18"
-                        rx="2"
-                        ry="2"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <line
-                        x1="16"
-                        y1="2"
-                        x2="16"
-                        y2="6"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <line
-                        x1="8"
-                        y1="2"
-                        x2="8"
-                        y2="6"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <line
-                        x1="3"
-                        y1="10"
-                        x2="21"
-                        y2="10"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    已加载 {loadedRows}/{sheetsData.users.length}
-                  </>
-                )}
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line
+                    x1="16"
+                    y1="2"
+                    x2="16"
+                    y2="6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line
+                    x1="8"
+                    y1="2"
+                    x2="8"
+                    y2="6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line
+                    x1="3"
+                    y1="10"
+                    x2="21"
+                    y2="10"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                已加载 {loadedRows}/{sheetsData.users.length}
               </span>
             )}
             <span style={{ color: '#6b7280' }}>💡 双击单元格编辑</span>
@@ -1058,6 +1157,7 @@ const ReactDataGrid = () => {
           position: 'relative'
         }}>
           <DataEditor
+            ref={dataEditorRef}
             getCellContent={getCellContent}
             columns={columns}
             rows={data.length}
@@ -1111,7 +1211,21 @@ const ReactDataGrid = () => {
                   
                   // 检查是否有缓存的真实头像
                   if (url && typeof url === 'string' && url.startsWith('http')) {
-                    const cachedImg = imageCache.current.get(url)
+                    // 首先检查全局缓存
+                    let cachedImg = globalImageCache.get(url)
+                    if (cachedImg && typeof cachedImg === 'string') {
+                      // 如果是base64字符串，转换为Image对象
+                      const img = new Image()
+                      img.src = cachedImg
+                      cachedImg = img
+                    }
+                    
+                    // 然后检查组件缓存
+                    if (!cachedImg) {
+                      cachedImg = imageCache.current.get(url)
+                      if (cachedImg) {
+                      }
+                    }
                     
                     if (cachedImg && cachedImg !== null) {
                       // 绘制真实头像（覆盖首字母）
@@ -1128,7 +1242,7 @@ const ReactDataGrid = () => {
                       ctx.strokeStyle = '#ffffff'
                       ctx.lineWidth = 2
                       ctx.stroke()
-                    } else if (!loadingCache.current.has(url) && !imageCache.current.has(url)) {
+                    } else if (!loadingCache.current.has(url) && !imageCache.current.has(url) && !globalImageCache.has(url)) {
                       // 开始预加载图片（避免重复加载）
                       preloadAvatar(url)
                     }

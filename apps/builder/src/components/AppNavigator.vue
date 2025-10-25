@@ -12,16 +12,36 @@ import IconDatabase from './icons/IconDatabase.vue';
 import IconLayout from './icons/IconLayout.vue';
 import IconAction from './icons/IconAction.vue';
 import IconSettings from './icons/IconSettings.vue';
+import SimpleIcon from './SimpleIcon.vue';
+import { cachedViews } from '@/composables/useKeepAlive';
+
+// 定义组件名称，用于keep-alive缓存
+defineOptions({
+  name: 'AppView'
+})
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- 顶部导航栏 -->
     <header class="bg-white border-b border-gray-200 shadow-sm">
-      <div class="px-8">
+      <div class="px-[16px]">
         <div class="flex justify-between items-center h-16">
           <!-- 左侧：Logo -->
           <div class="flex items-center">
+            <!-- 综合字体图标 -->
+            <div class="flex-shrink-0">
+              <SimpleIcon type="logo" :size="24" />
+            </div>
+            <!-- 你的图片 -->
+            <div class="flex-shrink-0 ml-2 mr-1">
+              <img src="/src/assets/images/liuhua.jpg" alt="Logo"
+                class="w-[40px] h-[40px] rounded-lg object-cover border border-gray-200" />
+            </div>
+
+
+
+            <!-- 应用名称 -->
             <div class="flex-shrink-0">
               <h1 class="text-xl font-semibold text-gray-900">低代码平台</h1>
             </div>
@@ -62,7 +82,11 @@ import IconSettings from './icons/IconSettings.vue';
     <!-- 主内容区域 -->
     <div class=" ">
       <div class="bg-white  shadow-sm  h-full overflow-hidden">
-        <RouterView />
+        <RouterView v-slot="{ Component }">
+          <keep-alive :include="cachedViews">
+            <component :is="Component" />
+          </keep-alive>
+        </RouterView>
       </div>
     </div>
   </div>

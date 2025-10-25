@@ -8,6 +8,11 @@
 -->
 <script setup lang="ts">
 import FlowEditor from '../components/FlowEditer/FlowEditor.vue'
+
+// 定义组件名称，用于keep-alive缓存
+defineOptions({
+  name: 'ActionsView'
+})
 </script>
 
 <template>

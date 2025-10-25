@@ -186,6 +186,11 @@ import dagre from '@dagrejs/dagre'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SimpleIcon from '@/components/SimpleIcon.vue'
 
+// 定义组件名称，用于keep-alive缓存
+defineOptions({
+    name: 'FlowEditor'
+})
+
 // 初始节点和边
 const initialNodes: Node[] = [
     {

@@ -71,7 +71,8 @@ const iconConfig = {
     'delete': { class: 'icon-icon_huabanfuben', color: '#ef4444', text: '🗑' },
 
     // 默认图标
-    'default': { class: '', color: '#9ca3af', text: '?' }
+    'default': { class: '', color: '#9ca3af', text: '?' },
+    'logo': { class: 'icon-zonghe', color: '#061B40', text: '?' }
 }
 
 const config = computed(() => iconConfig[props.type as keyof typeof iconConfig] || iconConfig.default)
