@@ -112,10 +112,7 @@
                             align-items: center;
                             justify-content: center;
                         ">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
+                    <SimpleIcon type="add" :size="16" :noBackground="true" />
                 </button>
 
                 <div v-if="showNodePanel" style="
@@ -130,17 +127,23 @@
                          min-width: 120px;
                          z-index: 2001;
                      ">
-                    <div @click="addSpecificNode('input')" style="padding: 8px; cursor: pointer; border-radius: 4px;"
+                    <div @click="addSpecificNode('input')"
+                        style="padding: 8px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px;"
                         onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">
-                        📥 输入节点
+                        <SimpleIcon type="input-node" :size="16" :noBackground="true" />
+                        <span>输入节点</span>
                     </div>
-                    <div @click="addSpecificNode('math')" style="padding: 8px; cursor: pointer; border-radius: 4px;"
+                    <div @click="addSpecificNode('math')"
+                        style="padding: 8px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px;"
                         onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">
-                        🔢 数学运算
+                        <SimpleIcon type="math-operation" :size="16" :noBackground="true" />
+                        <span>数学运算</span>
                     </div>
-                    <div @click="addSpecificNode('output')" style="padding: 8px; cursor: pointer; border-radius: 4px;"
+                    <div @click="addSpecificNode('output')"
+                        style="padding: 8px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 8px;"
                         onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">
-                        📤 输出节点
+                        <SimpleIcon type="output-node" :size="16" :noBackground="true" />
+                        <span>输出节点</span>
                     </div>
                 </div>
             </div>
@@ -150,24 +153,24 @@
         <Teleport to="body">
             <div v-if="activeNodeMenu" class="node-context-menu" :style="menuPosition" @click.stop>
                 <div class="menu-item" @click="runNode(activeNodeMenu)">
-                    <span class="menu-icon">▶️</span>
+                    <SimpleIcon type="run" :size="16" :noBackground="true" />
                     运行此节点
                 </div>
                 <div class="menu-item" @click="editNode(activeNodeMenu)">
-                    <span class="menu-icon">✏️</span>
+                    <SimpleIcon type="edit" :size="16" :noBackground="true" />
                     更改节点
                 </div>
                 <div class="menu-item" @click="copyNode(activeNodeMenu)">
-                    <span class="menu-icon">📋</span>
+                    <SimpleIcon type="copy" :size="16" :noBackground="true" />
                     复制节点
                 </div>
                 <div v-if="isOutputNode(activeNodeMenu)" class="menu-item" @click="exportResult(activeNodeMenu)">
-                    <span class="menu-icon">📤</span>
+                    <SimpleIcon type="export" :size="16" :noBackground="true" />
                     导出结果
                 </div>
                 <div class="menu-divider"></div>
                 <div class="menu-item danger" @click="deleteNode(activeNodeMenu)">
-                    <span class="menu-icon">🗑️</span>
+                    <SimpleIcon type="delete" :size="16" :noBackground="true" />
                     删除节点
                 </div>
             </div>
@@ -181,6 +184,7 @@ import { VueFlow, useVueFlow, Handle, Position } from '@vue-flow/core'
 import type { Node, Edge, Connection } from '@vue-flow/core'
 import dagre from '@dagrejs/dagre'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import SimpleIcon from '@/components/SimpleIcon.vue'
 
 // 初始节点和边
 const initialNodes: Node[] = [

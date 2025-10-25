@@ -1,6 +1,20 @@
 import type { Component } from 'vue'
 import type { Block } from './types/block'
 
+// 导入图标组件
+import IconDatabase from './components/icons/IconDatabase.vue'
+import IconLayout from './components/icons/IconLayout.vue'
+import IconAction from './components/icons/IconAction.vue'
+import IconSettings from './components/icons/IconSettings.vue'
+
+// 图标映射表
+export const iconMap = {
+  'database': IconDatabase,
+  'layout': IconLayout,
+  'action': IconAction,
+  'settings': IconSettings,
+}
+
 // 导入其他物料组件
 import NotesBlock from './blocks/NotesBlock.vue'
 import ViewBlock from './blocks/ViewBlock.vue'
@@ -20,7 +34,7 @@ export interface BlockDefinition {
   type: string
   name: string
   description?: string
-  icon?: string
+  icon?: string | Component
   category?: string
   material: Component | (() => Component)
   props?: Record<string, unknown>
@@ -42,7 +56,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'simpleTitle',
     name: '简单标题',
-    icon: 'T',
+    icon: 'title',
     category: '标题',
     material: TextBlock,
     defaultProps: { content: '简单标题', fontSize: 22, align: 'left' },
@@ -50,7 +64,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'imageTitle',
     name: '图片标题',
-    icon: '🏞️',
+    icon: 'image',
     category: '标题',
     material: ViewBlock, // 使用 ViewBlock 组合图片和文字
     defaultProps: { content: '图片标题' },
@@ -59,7 +73,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'card',
     name: '卡片',
-    icon: '💳',
+    icon: 'card',
     category: '系列',
     material: CardBlock,
     defaultProps: {
@@ -79,7 +93,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'list',
     name: '列表',
-    icon: '📄',
+    icon: 'list',
     category: '系列',
     material: ListBlock,
     defaultProps: {
@@ -87,7 +101,7 @@ const baseBlocks: BlockDefinition[] = [
       items: ['列表项 1', '列表项 2', '列表项 3'],
       listType: 'unordered',
       showIcon: true,
-      icon: '•',
+      icon: 'list',
       itemSpacing: 8,
       textColor: '#374151',
       padding: 16
@@ -98,7 +112,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'container',
     name: '容器',
-    icon: '⬜',
+    icon: 'container',
     category: '布局',
     material: ContainerBlock,
     defaultProps: {
@@ -120,7 +134,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'separator',
     name: '分隔符',
-    icon: '⎯',
+    icon: 'separator',
     category: '布局',
     material: SeparatorBlock,
     defaultProps: {
@@ -137,7 +151,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'quote',
     name: '引言',
-    icon: '"',
+    icon: 'quote',
     category: '内容',
     material: QuoteBlock,
     defaultProps: {
@@ -146,7 +160,7 @@ const baseBlocks: BlockDefinition[] = [
       source: '来源',
       authorPrefix: '—',
       showIcon: true,
-      icon: '"',
+      icon: 'quote',
       quoteStyle: 'default',
       backgroundColor: '#f9fafb',
       borderColor: '#6b7280',
@@ -160,7 +174,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'image',
     name: '图片',
-    icon: '🖼️',
+    icon: 'image',
     category: '内容',
     material: ImageBlock,
     defaultProps: { src: 'https://picsum.photos/200/300' }
@@ -168,13 +182,13 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'notes',
     name: '笔记',
-    icon: '📝',
+    icon: 'note',
     category: '内容',
     material: NotesBlock,
     defaultProps: {
       title: '笔记标题',
       content: '这是一条笔记内容。你可以在这里记录重要信息、想法或提醒事项。',
-      icon: '📝',
+      icon: 'note',
       showHeader: true,
       showTimestamp: false,
       noteType: 'note',
@@ -186,7 +200,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'button',
     name: '按钮',
-    icon: '🔘',
+    icon: 'button',
     category: '操作',
     material: ButtonBlock,
     defaultProps: {
@@ -197,7 +211,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'form',
     name: '表单',
-    icon: '📋',
+    icon: 'form',
     category: '操作',
     material: FormBlock,
     defaultProps: {}
@@ -206,7 +220,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'lineChart',
     name: '折线图',
-    icon: '📈',
+    icon: 'line-chart',
     category: '图表',
     material: ChartBlock,
     defaultProps: {
@@ -229,7 +243,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'pieChart',
     name: '饼图',
-    icon: '🥧',
+    icon: 'pie-chart',
     category: '图表',
     material: ChartBlock,
     defaultProps: {
@@ -255,7 +269,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'barChart',
     name: '条形图',
-    icon: '📊',
+    icon: 'bar-chart',
     category: '图表',
     material: ChartBlock,
     defaultProps: {
@@ -278,7 +292,7 @@ const baseBlocks: BlockDefinition[] = [
   {
     type: 'radialChart',
     name: '径向图',
-    icon: '🎯',
+    icon: 'radial-chart',
     category: '图表',
     material: ChartBlock,
     defaultProps: {

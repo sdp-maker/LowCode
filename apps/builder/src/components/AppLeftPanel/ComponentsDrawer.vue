@@ -11,6 +11,7 @@ import { ref, computed } from 'vue'
 import { getBlocks, createBlock } from "@/blocks"
 import type { Block } from "@/types/block"
 import type { BlockDefinition } from "@/blocks"
+import SimpleIcon from "@/components/SimpleIcon.vue"
 
 // 获取所有块定义
 const allBlocks = getBlocks()
@@ -160,7 +161,9 @@ const emit = defineEmits<{
         }" draggable="true" @dragstart="handleDragStart($event, index)" @dragover="handleDragOver($event, index)"
           @dragleave="handleDragLeave" @drop="handleDrop($event, index)" @dragend="handleDragEnd">
           <div class="component-content">
-            <div class="component-icon">{{ getBlockIcon(block.type) }}</div>
+            <div class="component-icon">
+              <SimpleIcon :type="getBlockIcon(block.type)" :size="24" />
+            </div>
             <div class="component-name">{{ block.label }}</div>
           </div>
           <button class="delete-button" @click="removeComponent(block.id)" title="删除组件">
@@ -192,7 +195,7 @@ const emit = defineEmits<{
               <div v-for="block in blocks" :key="block.type" class="component-option"
                 @click="addComponentToPreview(block.type)">
                 <div class="component-option-icon">
-                  <span>{{ block.icon }}</span>
+                  <SimpleIcon :type="block.icon" :size="32" />
                 </div>
                 <div class="component-option-name">{{ block.name }}</div>
               </div>
@@ -381,16 +384,16 @@ const emit = defineEmits<{
 }
 
 .component-option {
-  @apply flex flex-col items-center justify-center p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-all duration-200;
-  min-height: 80px;
+  @apply flex flex-col items-center justify-center p-2 rounded-lg hover:bg-gray-100 cursor-pointer transition-all duration-200;
+
 }
 
 .component-option:hover {
-  @apply border-green-500 shadow-md;
+  @apply border-gray-300 shadow-sm;
 }
 
 .component-option-icon {
-  @apply w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-2 text-xl;
+  @apply flex items-center justify-center mb-2;
 }
 
 .component-option-name {

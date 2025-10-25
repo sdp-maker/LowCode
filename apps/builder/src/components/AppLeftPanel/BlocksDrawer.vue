@@ -10,6 +10,7 @@
 import { getBlocks } from "@/blocks"
 import { SmoothDndContainer } from "@/components/SmoothDnd/SmoothDndContainer"
 import { SmoothDndDraggable } from "@/components/SmoothDnd/SmoothDndDraggable"
+import SimpleIcon from "@/components/SimpleIcon.vue"
 
 // 获取所有块定义
 const blocks = getBlocks()
@@ -27,7 +28,9 @@ const getChildPayload = (index: number) => blocks[index]
       <SmoothDndContainer behaviour="copy" group-name="blocks" orientation="vertical"
         :get-child-payload="getChildPayload" class="components-grid">
         <SmoothDndDraggable v-for="block in blocks" :key="block.type" class="component-item">
-          <div class="component-icon">{{ block.icon }}</div>
+          <div class="component-icon">
+            <SimpleIcon :type="block.icon" :size="24" />
+          </div>
           <div class="component-name">{{ block.name }}</div>
         </SmoothDndDraggable>
       </SmoothDndContainer>
@@ -105,7 +108,7 @@ const getChildPayload = (index: number) => blocks[index]
 
 
 .component-item {
-  @apply flex flex-col items-center justify-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-move transition-colors;
+  @apply flex flex-col items-center justify-center p-3 rounded-md hover:bg-gray-50 cursor-move transition-colors;
   min-height: 80px;
   margin-bottom: 8px;
 }
