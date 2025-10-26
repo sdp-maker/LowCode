@@ -32,4 +32,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  optimizeDeps: {
+    include: [
+      '@glideapps/glide-data-grid'
+    ]
+  },
+  build: {
+    commonjsOptions: {
+      include: [/@glideapps\/glide-data-grid/, /node_modules/]
+    }
+  },
+  define: {
+    global: 'globalThis'
+  }
 })

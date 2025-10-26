@@ -17,9 +17,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/app', // 根路径重定向到app
+    },
+    {
       path: '/app',
       name: 'app',
       component: AppView,
+      redirect: '/app/dataSource', // 默认重定向到数据源页面
       children: [
         {
           path: 'dataSource',

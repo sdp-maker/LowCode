@@ -12,7 +12,6 @@ import IconDatabase from './icons/IconDatabase.vue';
 import IconLayout from './icons/IconLayout.vue';
 import IconAction from './icons/IconAction.vue';
 import IconSettings from './icons/IconSettings.vue';
-import SimpleIcon from './SimpleIcon.vue';
 import { cachedViews } from '@/composables/useKeepAlive';
 
 // 定义组件名称，用于keep-alive缓存
@@ -28,27 +27,31 @@ defineOptions({
       <div class="px-[16px]">
         <div class="flex justify-between items-center h-16">
           <!-- 左侧：Logo -->
-          <div class="flex items-center">
-            <!-- 综合字体图标 -->
+          <div class="flex items-center gap-3">
+            <!-- Logo图标 -->
             <div class="flex-shrink-0">
-              <SimpleIcon type="logo" :size="24" />
+              <RouterLink to="/app" class="block   cursor-pointer">
+                <img src="/logo.png" alt="Logo" class="w-8 h-8 rounded-lg object-cover " />
+              </RouterLink>
             </div>
+
             <!-- 你的图片 -->
-            <div class="flex-shrink-0 ml-2 mr-1">
-              <img src="/src/assets/images/liuhua.jpg" alt="Logo"
-                class="w-[40px] h-[40px] rounded-lg object-cover border border-gray-200" />
+            <div class="flex-shrink-0">
+              <img src="/src/assets/images/liuhua.jpg" alt="Avatar"
+                class="w-8 h-8 rounded-full object-cover border-2 border-indigo-200 shadow-sm" />
             </div>
-
-
 
             <!-- 应用名称 -->
             <div class="flex-shrink-0">
-              <h1 class="text-xl font-semibold text-gray-900">低代码平台</h1>
+              <RouterLink to="/app" class="block transition-colors duration-200 hover:text-indigo-600 cursor-pointer">
+                <h1 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-200">
+                  低代码平台</h1>
+              </RouterLink>
             </div>
           </div>
 
           <!-- 中间：导航菜单 -->
-          <nav class="flex items-center space-x-1">
+          <nav class="flex items-center space-x-[8px] justify-center">
             <RouterLink to="/app/dataSource"
               class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50"
               active-class="bg-indigo-50 text-indigo-600 shadow-sm">
