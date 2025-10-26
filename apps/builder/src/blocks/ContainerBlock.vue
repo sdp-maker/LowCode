@@ -50,16 +50,14 @@ const hasContent = computed(() => {
 })
 
 const containerStyle = computed(() => ({
-    backgroundColor: props.backgroundColor || '#ffffff',
-    borderColor: props.borderColor || '#e5e7eb',
-    borderWidth: `${props.borderWidth || 1}px`,
-    borderStyle: props.borderStyle || 'solid',
-    borderRadius: `${props.borderRadius || 8}px`,
+    backgroundColor: props.backgroundColor || 'transparent',
+    border: 'none',
+    borderRadius: `${props.borderRadius || 0}px`,
     padding: `${props.padding || 16}px`,
     margin: `${props.margin || 0}px`,
     minHeight: props.minHeight ? `${props.minHeight}px` : '120px',
     maxHeight: props.maxHeight ? `${props.maxHeight}px` : 'none',
-    boxShadow: props.shadow ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none'
+    boxShadow: 'none'
 }))
 
 const contentStyle = computed(() => ({
@@ -84,15 +82,16 @@ const containerClass = computed(() => {
 }
 
 .container-block--empty {
-    @apply border-dashed;
+    border: none;
 }
 
 .container-block--empty:hover {
-    @apply border-blue-300 bg-blue-50;
+    background-color: transparent;
 }
 
 .container-header {
-    @apply mb-3 pb-2 border-b border-gray-200;
+    @apply mb-3 pb-2;
+    border: none;
 }
 
 .container-title {

@@ -74,19 +74,23 @@ const iconStyle = computed(() => ({
 
 <style scoped>
 .quote-block {
-  @apply border-l-4 transition-all duration-200;
+  @apply transition-all duration-200;
+  border: none;
 }
 
 .quote-block--modern {
-  @apply bg-gradient-to-r from-blue-50 to-indigo-50 border-l-blue-400 rounded-lg shadow-sm;
+  @apply bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg;
+  border: none;
 }
 
 .quote-block--minimal {
-  @apply bg-transparent border-l-gray-300;
+  @apply bg-transparent;
+  border: none;
 }
 
 .quote-block--bordered {
-  @apply border border-gray-200 rounded-lg shadow-sm;
+  @apply rounded-lg;
+  border: none;
 }
 
 .quote-content {

@@ -38,12 +38,13 @@ const textStyle = computed(() => {
 
 <style scoped>
 .text-block {
-    @apply p-4 rounded-lg border border-gray-200;
+    @apply p-4;
     min-height: 40px;
     display: flex;
     align-items: center;
     width: 100%;
     box-sizing: border-box;
+    border: none;
 }
 
 .text-block h1 {

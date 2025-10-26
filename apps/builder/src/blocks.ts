@@ -28,6 +28,7 @@ import CardBlock from './blocks/CardBlock.vue'
 import ListBlock from './blocks/ListBlock.vue'
 import ContainerBlock from './blocks/ContainerBlock.vue'
 import SeparatorBlock from './blocks/SeparatorBlock.vue'
+import RichEditorBlock from './blocks/RichEditorBlock.vue'
 
 // 块定义接口
 export interface BlockDefinition {
@@ -198,6 +199,29 @@ const baseBlocks: BlockDefinition[] = [
     }
   },
   {
+    type: 'richEditor',
+    name: '富文本编辑器',
+    icon: 'edit',
+    category: '内容',
+    material: RichEditorBlock,
+    defaultProps: {
+      title: '文本编辑器',
+      showTitle: false,
+      initialContent: '<p>我正在使用<strong>Vue.js</strong> 运行 <strong>Tiptap</strong>。 🎉</p><p><br></p><p>您还可以教给编辑器新事物。例如，识别十六进制颜色并添加颜色</p><p><br></p><p>动态颜色：<span style="color: #401f3e">#401f3e</span> <span style="color: #3f2e56">#3f2e56</span> <span style="color: #faf2a1">#faf2a1</span> <span style="color: #759aab">#759aab</span> <span style="color: #FD9170">#FD9170</span> <span style="color: #453f78">#453f78</span> <span style="color: #68CEF8">#68CEF8</span> <span style="color: #80cbc4">#80cbc4</span> <span style="color: #9DEF8F">#9DEF8F</span></p>',
+      placeholder: '开始输入...',
+      toolbar: 'minimal',
+      theme: 'snow',
+      minHeight: 200,
+      maxHeight: 600,
+      showWordCount: false,
+      readOnly: false,
+      backgroundColor: 'transparent',
+      borderRadius: 0,
+      padding: 0,
+      shadow: false
+    }
+  },
+  {
     type: 'button',
     name: '按钮',
     icon: 'button',
@@ -205,7 +229,7 @@ const baseBlocks: BlockDefinition[] = [
     material: ButtonBlock,
     defaultProps: {
       buttonText: 'Click me',
-      buttonType: 'primary',
+      buttonType: 'primary'
     }
   },
   {

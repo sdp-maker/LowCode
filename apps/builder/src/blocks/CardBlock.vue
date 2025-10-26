@@ -71,11 +71,8 @@ function handleButtonClick() {
 
 <style scoped>
 .card-block {
-    @apply border border-gray-200 rounded-lg overflow-hidden transition-shadow duration-200;
-}
-
-.card-block:hover {
-    @apply shadow-md;
+    @apply overflow-hidden;
+    border: none;
 }
 
 .card-image {

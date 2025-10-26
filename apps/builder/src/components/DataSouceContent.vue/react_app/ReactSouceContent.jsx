@@ -40,7 +40,7 @@ const ReactDataGrid = () => {
     preloadAvatar,
     restoreCachedAvatar
   } = useImageCache()
-
+  
   // 懒加载相关状态 - 使用当前表格的状态
   const currentState = getCurrentState()
   const loadedRows = currentState.loadedRows
@@ -64,8 +64,33 @@ const ReactDataGrid = () => {
       return 0
     }
     
-    // 直接使用CompactSelection的size属性
-    return selection.rows.size || 0
+    try {
+      // 使用与删除函数相同的逻辑来计算选中行数量
+      let count = 0
+      
+      if (selection.rows.hasIndex) {
+        // 遍历所有可能的行索引
+        for (let i = 0; i < data.length; i++) {
+          if (selection.rows.hasIndex(i)) {
+            count++
+          }
+        }
+      } else if (selection.rows.offset !== undefined && selection.rows.length !== undefined) {
+        // 如果是连续选择
+        count = selection.rows.length
+      } else if (selection.rows.size !== undefined) {
+        // 尝试使用size属性
+        count = selection.rows.size
+      } else if (typeof selection.rows[Symbol.iterator] === 'function') {
+        // 尝试迭代器
+        count = Array.from(selection.rows).length
+      }
+      
+      return count
+    } catch (error) {
+      console.error('获取选中行数量时出错:', error)
+      return 0
+    }
   }
   
   // 当前数据
@@ -211,15 +236,15 @@ const ReactDataGrid = () => {
       default:
         // 为新创建的表格提供通用列定义
         if (activeSheet.startsWith('sheet_')) {
-          return [
-            { title: 'ID', width: 80, grow: 0 },
-            { title: '名称', width: 120, grow: 1 },
-            { title: '数值', width: 100, grow: 0 },
-            { title: '状态', width: 80, grow: 0 },
-            { title: '类型', width: 120, grow: 1 },
-            { title: '图标', width: 80, grow: 0 },
-            { title: '描述', width: 200, grow: 2 },
-          ]
+            return [
+              { title: 'ID', width: 80, grow: 0 },
+              { title: '名称', width: 120, grow: 1 },
+              { title: '数值', width: 100, grow: 0 },
+              { title: '状态', width: 80, grow: 0 },
+              { title: '类型', width: 120, grow: 1 },
+              { title: '图标', width: 80, grow: 0 },
+              { title: '描述', width: 200, grow: 2 },
+            ]
         }
         return [
           { title: 'ID', width: 80, grow: 0 },
@@ -239,7 +264,7 @@ const ReactDataGrid = () => {
   const getCellContent = useCallback((cell) => {
     const [col, row] = cell
     const cellData = data[row]?.[col] || ''
-    
+
     // ID 列只读
     if (col === 0) {
       return {
@@ -384,24 +409,40 @@ const ReactDataGrid = () => {
       return
     }
     
-    // 获取选中的行索引 - 尝试不同的CompactSelection API
+    // 获取选中的行索引 - 使用正确的CompactSelection API
     let selectedRows = []
     
-    // 尝试不同的方式获取选中的行
-    if (selection.rows.items) {
-      selectedRows = selection.rows.items
-    } else if (selection.rows.toArray) {
-      selectedRows = selection.rows.toArray()
-    } else if (typeof selection.rows[Symbol.iterator] === 'function') {
-      selectedRows = Array.from(selection.rows)
-    } else {
-      // 如果是数字，表示单个选择
-      if (typeof selection.rows === 'number') {
-        selectedRows = [selection.rows]
+    try {
+      // CompactSelection v6.0.3 的正确用法
+      if (selection.rows.hasIndex) {
+        // 遍历所有可能的行索引
+        for (let i = 0; i < data.length; i++) {
+          if (selection.rows.hasIndex(i)) {
+            selectedRows.push(i)
+          }
+        }
+      } else if (selection.rows.offset !== undefined && selection.rows.length !== undefined) {
+        // 如果是连续选择
+        for (let i = selection.rows.offset; i < selection.rows.offset + selection.rows.length; i++) {
+          selectedRows.push(i)
+        }
+      } else {
+        // 尝试其他方法
+        console.log('CompactSelection对象:', selection.rows)
+        console.log('CompactSelection属性:', Object.getOwnPropertyNames(selection.rows))
+        console.log('CompactSelection原型方法:', Object.getOwnPropertyNames(Object.getPrototypeOf(selection.rows)))
+        
+        // 尝试迭代器
+        if (typeof selection.rows[Symbol.iterator] === 'function') {
+          selectedRows = Array.from(selection.rows)
+        }
       }
+    } catch (error) {
+      console.error('获取选中行时出错:', error)
+      return
     }
     
-    console.log('选中的行:', selectedRows, '选择对象:', selection.rows)
+    console.log('选中的行:', selectedRows)
     
     if (selectedRows.length === 0) {
       console.log('没有选中任何行')
@@ -415,7 +456,9 @@ const ReactDataGrid = () => {
       let newData = [...prevData]
       rowsToDelete.forEach(rowIndex => {
         console.log('删除行索引:', rowIndex)
-        newData.splice(rowIndex, 1)
+        if (rowIndex >= 0 && rowIndex < newData.length) {
+          newData.splice(rowIndex, 1)
+        }
       })
       console.log('删除后的数据长度:', newData.length)
       return newData
@@ -426,7 +469,9 @@ const ReactDataGrid = () => {
       const newSheets = { ...prevSheets }
       let updatedData = [...newSheets[activeSheet]]
       rowsToDelete.forEach(rowIndex => {
-        updatedData.splice(rowIndex, 1)
+        if (rowIndex >= 0 && rowIndex < updatedData.length) {
+          updatedData.splice(rowIndex, 1)
+        }
       })
       newSheets[activeSheet] = updatedData
       return newSheets

@@ -191,34 +191,39 @@ function handleBlockClick(block: Block) {
 
 /* 预览块样式 */
 .preview-block {
-  @apply mb-2 border border-gray-200 rounded bg-white hover:border-blue-400 transition-colors cursor-move;
+  @apply mb-2 bg-transparent transition-colors cursor-move;
   min-height: 60px;
+  border: none;
 }
 
 .preview-block:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
 }
 
 /* 拖拽占位符样式 */
 .drop-placeholder {
-  @apply border-2 border-dashed border-blue-400 bg-blue-50 rounded;
+  @apply bg-blue-50 rounded;
   min-height: 60px;
   margin-bottom: 8px;
+  border: 2px dashed rgba(59, 130, 246, 0.3);
 }
 
 .preview-block.is-selected {
-  @apply border-blue-500 border-2;
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+  border: 1px solid #3b82f6;
+  background-color: transparent;
+  border-radius: 4px;
 }
 
 .preview-block[draggable="true"]:hover {
-  @apply border-blue-300;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background-color: rgba(59, 130, 246, 0.02);
+  border-radius: 4px;
 }
 
 .preview-block[draggable="true"]:active {
-  @apply border-blue-400;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #2563eb;
+  background-color: rgba(37, 99, 235, 0.05);
+  border-radius: 4px;
 }
 
 .preview-container {

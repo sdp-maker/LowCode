@@ -23,12 +23,14 @@ import CardBlock from './CardBlock.vue'
 import ListBlock from './ListBlock.vue'
 import ContainerBlock from './ContainerBlock.vue'
 import SeparatorBlock from './SeparatorBlock.vue'
+import RichEditorBlock from './RichEditorBlock.vue'
 
 const props = defineProps<{ block: Block }>()
 
 const component = computed(() => {
     switch (props.block.type) {
         case 'heroTitle': return TextBlock
+        case 'simpleTitle': return TextBlock
         case 'quote': return QuoteBlock
         case 'image': return ImageBlock
         case 'notes': return NotesBlock
@@ -40,6 +42,7 @@ const component = computed(() => {
         case 'list': return ListBlock
         case 'container': return ContainerBlock
         case 'separator': return SeparatorBlock
+        case 'richEditor': return RichEditorBlock
         // 新增图表类型
         case 'lineChart': return ChartBlock
         case 'pieChart': return ChartBlock

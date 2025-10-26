@@ -99,7 +99,8 @@ const formattedTimestamp = computed(() => {
 
 <style scoped>
 .notes-block {
-  @apply border rounded-lg transition-all duration-200;
+  @apply rounded-lg transition-all duration-200;
+  border: none;
 }
 
 .notes-block:hover {
@@ -127,7 +128,8 @@ const formattedTimestamp = computed(() => {
 }
 
 .notes-footer {
-  @apply pt-2 border-t border-current border-opacity-20;
+  @apply pt-2;
+  border: none;
 }
 
 .notes-timestamp {
@@ -136,23 +138,23 @@ const formattedTimestamp = computed(() => {
 
 /* 类型特定样式 */
 .notes-block--info {
-  @apply border-blue-200;
+  border: none;
 }
 
 .notes-block--warning {
-  @apply border-yellow-200;
+  border: none;
 }
 
 .notes-block--success {
-  @apply border-green-200;
+  border: none;
 }
 
 .notes-block--error {
-  @apply border-red-200;
+  border: none;
 }
 
 .notes-block--note {
-  @apply border-yellow-200;
+  border: none;
 }
 
 /* 响应式设计 */

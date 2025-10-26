@@ -7,11 +7,16 @@
  * @Description: 组件库面板，显示可拖拽的组件列表
 -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { getBlocks, createBlock } from "@/blocks"
 import type { Block } from "@/types/block"
 import type { BlockDefinition } from "@/blocks"
 import SimpleIcon from "@/components/SimpleIcon.vue"
+
+// 定义 props
+const props = defineProps<{
+  blocks: Block[]
+}>()
 
 // 获取所有块定义
 const allBlocks = getBlocks()
@@ -28,8 +33,13 @@ const groupedBlocks = computed(() => {
   }, {} as Record<string, BlockDefinition[]>)
 })
 
-// 已添加到页面的组件
-const addedBlocks = ref<any[]>([])
+// 已添加到页面的组件 - 使用 props.blocks 作为数据源
+const addedBlocks = ref<Block[]>([...props.blocks])
+
+// 监听 props.blocks 变化，同步更新 addedBlocks
+watch(() => props.blocks, (newBlocks) => {
+  addedBlocks.value = [...newBlocks]
+}, { deep: true })
 
 // 组件选择弹窗状态
 const showModal = ref(false)
@@ -50,11 +60,7 @@ const addComponentToPreview = (componentType: string) => {
   const newBlock = createBlock(componentType)
   console.log('Created block:', newBlock)
   if (newBlock) {
-    // 添加到已添加组件列表
-    addedBlocks.value.push(newBlock)
-    console.log('Added blocks length:', addedBlocks.value.length)
-    console.log('Added blocks:', addedBlocks.value)
-    // 发射事件给父组件
+    // 发射事件给父组件，不直接修改 addedBlocks，因为它会通过 props 更新
     emit('add-component', newBlock)
   }
   showModal.value = false
@@ -68,13 +74,8 @@ const getBlockIcon = (type: string) => {
 
 // 删除组件
 const removeComponent = (blockId: string) => {
-  // 从已添加组件列表中移除
-  const index = addedBlocks.value.findIndex(b => b.id === blockId)
-  if (index !== -1) {
-    addedBlocks.value.splice(index, 1)
-    // 发射删除事件给父组件
-    emit('remove-component', blockId)
-  }
+  // 发射删除事件给父组件，不直接修改 addedBlocks，因为它会通过 props 更新
+  emit('remove-component', blockId)
 }
 
 // 拖拽相关状态
@@ -112,13 +113,14 @@ const handleDrop = (event: DragEvent, dropIndex: number) => {
   if (draggedIndex.value !== null && draggedIndex.value !== dropIndex) {
     console.log('Drop:', draggedIndex.value, 'to', dropIndex)
 
-    // 重新排序
-    const itemToMove = addedBlocks.value.splice(draggedIndex.value, 1)[0]
-    addedBlocks.value.splice(dropIndex, 0, itemToMove)
+    // 创建新的排序数组，不直接修改 addedBlocks
+    const newBlocks = [...addedBlocks.value]
+    const itemToMove = newBlocks.splice(draggedIndex.value, 1)[0]
+    newBlocks.splice(dropIndex, 0, itemToMove)
 
     // 发射重新排序事件给父组件
-    console.log('ComponentsDrawer: Emitting reorder event with blocks:', addedBlocks.value)
-    emit('reorder-components', addedBlocks.value)
+    console.log('ComponentsDrawer: Emitting reorder event with blocks:', newBlocks)
+    emit('reorder-components', newBlocks)
   }
 
   // 重置状态

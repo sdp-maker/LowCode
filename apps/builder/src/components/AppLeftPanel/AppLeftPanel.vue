@@ -10,6 +10,11 @@ import NavigationDrawer from './NavigationDrawer.vue'
 import ComponentsDrawer from './ComponentsDrawer.vue'
 import type { Block } from '@/types/block'
 
+// 定义 props
+const props = defineProps<{
+  blocks: Block[]
+}>()
+
 // 定义事件
 const emit = defineEmits<{
   'add-component': [block: Block]
@@ -41,8 +46,8 @@ const handleReorderComponents = (blocks: Block[]) => {
       <NavigationDrawer />
     </div>
     <div class="panel-section components-section">
-      <ComponentsDrawer @add-component="handleAddComponent" @remove-component="handleRemoveComponent"
-        @reorder-components="handleReorderComponents" />
+      <ComponentsDrawer :blocks="props.blocks" @add-component="handleAddComponent"
+        @remove-component="handleRemoveComponent" @reorder-components="handleReorderComponents" />
     </div>
   </div>
 </template>

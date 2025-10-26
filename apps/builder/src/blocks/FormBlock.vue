@@ -14,7 +14,8 @@
 
 <style scoped>
 .form-block {
-    @apply p-4 bg-white border border-gray-200 rounded-lg space-y-4;
+    @apply p-4 bg-white space-y-4;
+    border: none;
 }
 
 .form-group {
@@ -26,7 +27,8 @@ label {
 }
 
 input {
-    @apply px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+    border: 1px solid #e5e7eb;
 }
 
 button {
