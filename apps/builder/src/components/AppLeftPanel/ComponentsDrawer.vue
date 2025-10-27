@@ -227,7 +227,7 @@ const emit = defineEmits<{
 }
 
 .drawer-content {
-  @apply flex-1 p-2;
+  @apply flex-1 py-2;
   overflow-y: auto;
   max-height: calc(100vh - 200px);
   /* 限制最大高度以确保滚动条出现 */

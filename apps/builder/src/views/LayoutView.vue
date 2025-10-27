@@ -7,17 +7,21 @@
  * @Description: Glide 风格的布局管理页面
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import AppLeftPanel from '@/components/AppLeftPanel/AppLeftPanel.vue'
 import AppPreview from '@/components/AppPreviewer/AppPreviewer.vue'
 import AppRightPanel from '@/components/AppRightPanel/AppRightPanel.vue'
 import type { Block } from '@/types/block'
 import { createBlock } from '@/blocks'
+import { usePagesStore } from '@/stores/pages'
 
 // 定义组件名称，用于keep-alive缓存
 defineOptions({
   name: 'LayoutView'
 })
+
+// 页面管理
+const pagesStore = usePagesStore()
 
 // 创建默认组件的函数
 const createDefaultBlocks = (): Block[] => {
@@ -48,27 +52,39 @@ const createDefaultBlocks = (): Block[] => {
   return blocks
 }
 
-// 预览区的组件列表 - 初始化时加载默认组件
-const previewBlocks = ref<Block[]>(createDefaultBlocks())
+// 初始化首页的默认组件
+if (pagesStore.currentPage && pagesStore.currentPage.blocks.length === 0) {
+  const defaultBlocks = createDefaultBlocks()
+  pagesStore.updatePageBlocks(pagesStore.currentPageId, defaultBlocks)
+}
+
+// 预览区的组件列表 - 与当前页面同步
+const previewBlocks = computed(() => {
+  return pagesStore.currentPage?.blocks || []
+})
 
 // 处理添加组件事件
 const handleAddComponent = (block: Block) => {
-  previewBlocks.value.push(block)
+  const currentBlocks = [...(pagesStore.currentPage?.blocks || [])]
+  currentBlocks.push(block)
+  pagesStore.updatePageBlocks(pagesStore.currentPageId, currentBlocks)
 }
 
 // 处理删除组件事件
 const handleRemoveComponent = (blockId: string) => {
-  const index = previewBlocks.value.findIndex(b => b.id === blockId)
+  const currentBlocks = [...(pagesStore.currentPage?.blocks || [])]
+  const index = currentBlocks.findIndex(b => b.id === blockId)
   if (index !== -1) {
-    previewBlocks.value.splice(index, 1)
+    currentBlocks.splice(index, 1)
+    pagesStore.updatePageBlocks(pagesStore.currentPageId, currentBlocks)
   }
 }
 
 // 处理重新排序事件
 const handleReorderComponents = (blocks: Block[]) => {
   console.log('LayoutView: Received reorder event with blocks:', blocks)
-  previewBlocks.value = [...blocks]
-  console.log('LayoutView: Updated previewBlocks:', previewBlocks.value)
+  pagesStore.updatePageBlocks(pagesStore.currentPageId, blocks)
+  console.log('LayoutView: Updated page blocks:', blocks)
 }
 </script>
 <template>

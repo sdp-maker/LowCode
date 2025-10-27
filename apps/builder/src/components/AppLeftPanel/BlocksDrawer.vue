@@ -52,7 +52,7 @@ const getChildPayload = (index: number) => blocks[index]
 }
 
 .drawer-content {
-  @apply flex-1 p-2;
+  @apply flex-1 py-2;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(203, 213, 225, 0.8) rgba(241, 245, 249, 0.5);
