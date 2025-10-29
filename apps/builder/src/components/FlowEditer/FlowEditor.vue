@@ -542,35 +542,35 @@ const addSpecificNode = (nodeType: string) => {
 // 使用 dagre 进行自动布局
 // const autoLayoutNodes = () => {
 //     const g = new dagre.graphlib.Graph()
-    g.setDefaultEdgeLabel(() => ({}))
-    g.setGraph({ rankdir: 'LR', ranksep: 200, nodesep: 100 })
+//     g.setDefaultEdgeLabel(() => ({}))
+//     g.setGraph({ rankdir: 'LR', ranksep: 200, nodesep: 100 })
 
-    const nodes = elements.value.filter(el => 'data' in el) as Node[]
-    const edges = elements.value.filter(el => 'source' in el) as Edge[]
+//     const nodes = elements.value.filter(el => 'data' in el) as Node[]
+//     const edges = elements.value.filter(el => 'source' in el) as Edge[]
 
-    // 添加节点到 dagre 图
-    nodes.forEach(node => {
-        g.setNode(node.id, { width: 140, height: 80 })
-    })
+//     // 添加节点到 dagre 图
+//     nodes.forEach(node => {
+//         g.setNode(node.id, { width: 140, height: 80 })
+//     })
 
-    // 添加边到 dagre 图
-    edges.forEach(edge => {
-        g.setEdge(edge.source, edge.target)
-    })
+//     // 添加边到 dagre 图
+//     edges.forEach(edge => {
+//         g.setEdge(edge.source, edge.target)
+//     })
 
-    // 计算布局
-    dagre.layout(g)
+//     // 计算布局
+//     dagre.layout(g)
 
-    // 应用新位置并添加动画
-    nodes.forEach(node => {
-        const nodeWithPosition = g.node(node.id)
-        if (nodeWithPosition && nodeWithPosition.x !== undefined && nodeWithPosition.y !== undefined) {
-            animateNodeToPosition(node, nodeWithPosition.x - 70, nodeWithPosition.y - 40)
-        }
-    })
+//     // 应用新位置并添加动画
+//     nodes.forEach(node => {
+//         const nodeWithPosition = g.node(node.id)
+//         if (nodeWithPosition && nodeWithPosition.x !== undefined && nodeWithPosition.y !== undefined) {
+//             animateNodeToPosition(node, nodeWithPosition.x - 70, nodeWithPosition.y - 40)
+//         }
+//     })
 
-    showNodePanel.value = false // 布局后关闭面板
-}
+//     showNodePanel.value = false // 布局后关闭面板
+// }
 
 // 节点位置动画
 const animateNodeToPosition = (node: Node, targetX: number, targetY: number) => {
