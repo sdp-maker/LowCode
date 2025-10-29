@@ -709,8 +709,8 @@ watch(elements, () => {
 
     mathNodes.forEach(node => {
         calculateMathResult(node.id)
-//     })
-// }, { deep: true })
+    })
+}, { deep: true })
 </script>
 
 <style scoped>
