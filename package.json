@@ -7,6 +7,7 @@
   "scripts": {
     "dev:builder": "pnpm --filter builder run dev",
     "dev:runner": "pnpm --filter runner run dev",
+    "build": "pnpm --filter builder run build-only",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix apps/builder/src/**/*.{js,jsx,ts,tsx,vue}",
     "lint:style": "stylelint --fix apps/builder/src/**/*.{css,scss}",
