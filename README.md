@@ -67,7 +67,7 @@ LowCode/
 
 ```bash
 # 克隆项目
-git clone <repository-url>
+git clone https://github.com/sdp-maker/LowCode.git
 cd LowCode
 
 # 安装依赖
