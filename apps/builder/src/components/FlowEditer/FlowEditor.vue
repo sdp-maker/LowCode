@@ -182,7 +182,6 @@
 import { ref, onMounted, watch } from 'vue'
 import { VueFlow, useVueFlow, Handle, Position } from '@vue-flow/core'
 import type { Node, Edge, Connection } from '@vue-flow/core'
-import dagre from '@dagrejs/dagre'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import SimpleIcon from '@/components/SimpleIcon.vue'
 
@@ -572,30 +571,6 @@ const addSpecificNode = (nodeType: string) => {
 //     showNodePanel.value = false // 布局后关闭面板
 // }
 
-// 节点位置动画
-const animateNodeToPosition = (node: Node, targetX: number, targetY: number) => {
-    const startX = node.position.x
-    const startY = node.position.y
-    const duration = 1000 // 动画持续时间
-    const startTime = Date.now()
-
-    const animate = () => {
-        const elapsed = Date.now() - startTime
-        const progress = Math.min(elapsed / duration, 1)
-
-        // 使用 easeOutCubic 缓动函数
-        const easeProgress = 1 - Math.pow(1 - progress, 3)
-
-        node.position.x = startX + (targetX - startX) * easeProgress
-        node.position.y = startY + (targetY - startY) * easeProgress
-
-        if (progress < 1) {
-            requestAnimationFrame(animate)
-        }
-    }
-
-    requestAnimationFrame(animate)
-}
 
 // 更新节点值
 const updateNodeValue = (nodeId: string, key: string, value: any) => {
