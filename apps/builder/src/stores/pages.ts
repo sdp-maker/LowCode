@@ -59,7 +59,7 @@ export const usePagesStore = defineStore('pages', () => {
     
     // 如果删除的是当前页面，切换到第一个页面
     if (currentPageId.value === pageId && pages.value.length > 0) {
-      currentPageId.value = pages.value[0].id
+      currentPageId.value = pages.value[0]?.id || ''
     }
     
     return true

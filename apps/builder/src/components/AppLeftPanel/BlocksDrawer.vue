@@ -29,7 +29,7 @@ const getChildPayload = (index: number) => blocks[index]
         :get-child-payload="getChildPayload" class="components-grid">
         <SmoothDndDraggable v-for="block in blocks" :key="block.type" class="component-item">
           <div class="component-icon">
-            <SimpleIcon :type="block.icon" :size="24" />
+            <SimpleIcon :type="typeof block.icon === 'string' ? block.icon : '?'" :size="24" />
           </div>
           <div class="component-name">{{ block.name }}</div>
         </SmoothDndDraggable>

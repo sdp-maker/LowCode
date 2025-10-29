@@ -329,10 +329,10 @@ const isOutputNode = (nodeId: string) => {
 }
 
 // 关闭所有菜单
-const closeAllMenus = () => {
-    activeNodeMenu.value = null
-    showNodePanel.value = false
-}
+// const closeAllMenus = () => {
+//     activeNodeMenu.value = null
+//     showNodePanel.value = false
+// }
 
 // 运行单个节点
 const runNode = (nodeId: string) => {
@@ -540,8 +540,8 @@ const addSpecificNode = (nodeType: string) => {
 }
 
 // 使用 dagre 进行自动布局
-const autoLayoutNodes = () => {
-    const g = new dagre.graphlib.Graph()
+// const autoLayoutNodes = () => {
+//     const g = new dagre.graphlib.Graph()
     g.setDefaultEdgeLabel(() => ({}))
     g.setGraph({ rankdir: 'LR', ranksep: 200, nodesep: 100 })
 
@@ -709,8 +709,8 @@ watch(elements, () => {
 
     mathNodes.forEach(node => {
         calculateMathResult(node.id)
-    })
-}, { deep: true })
+//     })
+// }, { deep: true })
 </script>
 
 <style scoped>

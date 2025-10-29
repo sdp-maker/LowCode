@@ -212,9 +212,9 @@ function handlePropChange(key: string, value: any) {
   editorStore.updateBlockProps({ [key]: value })
 }
 
-function handleTableDataChange(key: string, tableData: any[][]) {
-  editorStore.updateBlockProps({ [key]: tableData })
-}
+// function handleTableDataChange(key: string, tableData: any[][]) {
+//   editorStore.updateBlockProps({ [key]: tableData })
+// }
 
 function handleJsonChange(key: string, jsonString: string) {
   try {

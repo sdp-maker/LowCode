@@ -71,8 +71,9 @@ const switchViewport = (viewport: ViewportType) => {
 
 // 切换全屏
 const toggleFullscreen = () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen()
+  const previewerElement = document.querySelector('.app-previewer') as HTMLElement
+  if (!document.fullscreenElement && previewerElement) {
+    previewerElement.requestFullscreen()
     isFullscreen.value = true
   } else {
     document.exitFullscreen()

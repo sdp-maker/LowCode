@@ -127,11 +127,11 @@ const handleContentChange = (newContent: string) => {
     emit('word-count-change', wordCount.value)
 }
 
-const handleSelectionChange = (range: any) => {
+const handleSelectionChange = (_range: any) => {
     // 处理选择变化
 }
 
-const handleEditorChange = (eventName: string, ...args: any[]) => {
+const handleEditorChange = (_eventName: string, ..._args: any[]) => {
     // 处理编辑器变化事件
 }
 
@@ -178,9 +178,9 @@ const showWordCount = computed(() => props.showWordCount !== false)
 defineExpose({
     getContent: () => content.value,
     setContent: (newContent: string) => {
-        content.value = newContent
+        content.value = newContent || ''
         if (quillEditor.value) {
-            quillEditor.value.setHTML(newContent)
+            quillEditor.value.setHTML(newContent || '')
         }
     },
     getWordCount: () => wordCount.value,

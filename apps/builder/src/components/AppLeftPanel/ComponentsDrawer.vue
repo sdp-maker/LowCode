@@ -67,9 +67,10 @@ const addComponentToPreview = (componentType: string) => {
 }
 
 // 获取组件图标
-const getBlockIcon = (type: string) => {
+const getBlockIcon = (type: string): string => {
   const block = allBlocks.find(b => b.type === type)
-  return block?.icon || '?'
+  const icon = block?.icon
+  return typeof icon === 'string' ? icon : '?'
 }
 
 // 删除组件
@@ -116,7 +117,9 @@ const handleDrop = (event: DragEvent, dropIndex: number) => {
     // 创建新的排序数组，不直接修改 addedBlocks
     const newBlocks = [...addedBlocks.value]
     const itemToMove = newBlocks.splice(draggedIndex.value, 1)[0]
-    newBlocks.splice(dropIndex, 0, itemToMove)
+    if (itemToMove) {
+      newBlocks.splice(dropIndex, 0, itemToMove)
+    }
 
     // 发射重新排序事件给父组件
     console.log('ComponentsDrawer: Emitting reorder event with blocks:', newBlocks)
@@ -197,7 +200,7 @@ const emit = defineEmits<{
               <div v-for="block in blocks" :key="block.type" class="component-option"
                 @click="addComponentToPreview(block.type)">
                 <div class="component-option-icon">
-                  <SimpleIcon :type="block.icon" :size="32" />
+                  <SimpleIcon :type="typeof block.icon === 'string' ? block.icon : '?'" :size="32" />
                 </div>
                 <div class="component-option-name">{{ block.name }}</div>
               </div>
