@@ -12,8 +12,19 @@ import { useEditorStore } from '@/stores/editor'
 
 const editorStore = useEditorStore()
 
+// 属性编辑器配置接口
+interface PropertyEditor {
+  type: string
+  label: string
+  placeholder?: string
+  min?: number
+  max?: number
+  unit?: string
+  options?: { value: string; label: string }[]
+}
+
 // 属性编辑器配置
-const propertyEditors = {
+const propertyEditors: Record<string, PropertyEditor> = {
   // 文本属性
   content: { type: 'text', label: '内容', placeholder: '请输入内容' },
   text: { type: 'text', label: '文本', placeholder: '请输入文本' },

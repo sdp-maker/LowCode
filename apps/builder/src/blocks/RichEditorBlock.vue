@@ -163,9 +163,10 @@ onMounted(() => {
     if (quillEditor.value && props.initialContent) {
         setTimeout(() => {
             if (quillEditor.value) {
-                quillEditor.value.setHTML(props.initialContent)
-                content.value = props.initialContent
-                wordCount.value = calculateWordCount(props.initialContent)
+                const contentToSet = props.initialContent || ''
+                quillEditor.value.setHTML(contentToSet)
+                content.value = contentToSet
+                wordCount.value = calculateWordCount(contentToSet)
             }
         }, 100)
     }
